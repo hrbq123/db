@@ -698,14 +698,6 @@
       "Enabled": {
         "type": "checkbox",
         "value": true
-      },
-      "AttemptsToRestart": {
-        "type": "input",
-        "value": 3
-      },
-      "NotifyWhenAutoRestart": {
-        "type": "checkbox",
-        "value": false
       }
     },
     "Storage": {
