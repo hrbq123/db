@@ -694,12 +694,6 @@
         "display": "hide"
       }
     },
-    "AutoRestart": {
-      "Enabled": {
-        "type": "checkbox",
-        "value": true
-      }
-    },
     "Storage": {
       "Storage": {
         "type": "storage",
