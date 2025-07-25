@@ -2460,32 +2460,6 @@
         "value": 0
       }
     },
-    "EventPt": {
-      "EventPtSwitch": {
-        "type": "checkbox",
-        "value": false
-      },
-      "Event2MapName": {
-        "type": "state",
-        "value": "HT6",
-        "display": "display"
-      },
-      "EventDailyAMapName": {
-        "type": "state",
-        "value": "T1>T2>T3>T4>T5>T6",
-        "display": "display"
-      },
-      "EventDailySpMapName": {
-        "type": "state",
-        "value": "sp",
-        "display": "display"
-      },
-      "EventDailyCD": {
-        "type": "state",
-        "value": "HT1>HT2>HT3>HT4>HT5>HT6",
-        "display": "display"
-      }
-    },
     "Fleet": {
       "Fleet1": {
         "type": "select",
