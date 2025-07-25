@@ -1,3 +1,5 @@
+import sys
+sys.path.append(r'C:/Users/W1NDe/Documents/GitHub/M-AzurLaneAutoScript')
 import re
 import typing as t
 from copy import deepcopy
@@ -31,7 +33,7 @@ ARCHIVES_PREFIX = {
     'tw': '檔案 '
 }
 MAINS = ['Main', 'Main2', 'Main3']
-EVENTS = ['Event', 'Event2', 'EventA', 'EventB', 'EventC', 'EventD', 'EventSp']
+EVENTS = ['Event', 'Event2', 'Event3', 'EventA', 'EventB', 'EventC', 'EventD', 'EventSp']
 GEMS_FARMINGS = ['GemsFarming']
 RAIDS = ['Raid', 'RaidDaily']
 WAR_ARCHIVES = ['WarArchives']
@@ -172,10 +174,23 @@ class ConfigGenerator:
         """
         # Construct args
         data = {}
+
         # Add dashboard to args
-        dashboard_and_task = {**self.dashboard,**self.task}
-        for path, groups in deep_iter(dashboard_and_task, depth=3):
-            if 'tasks' not in path and 'Dashboard' not in path:
+        for dashboard_key, dashboard_groups in self.dashboard.items():
+            if isinstance(dashboard_groups, list):
+                task = dashboard_key
+                # Add storage to dashboard task
+                if 'Storage' not in dashboard_groups:
+                    dashboard_groups.append('Storage')
+                for group in dashboard_groups:
+                    if group not in self.argument:
+                        print(f'`{task}.{group}` is not related to any argument group')
+                        continue
+                    deep_set(data, keys=[task, group], value=deepcopy(self.argument[group]))
+
+        # Add task to args
+        for path, groups in deep_iter(self.task, depth=3):
+            if 'tasks' not in path:
                 continue
             task = path[2] if 'tasks' in path else path[0]
             # Add storage to all task

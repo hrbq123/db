@@ -66,16 +66,16 @@
       "name": "イベント共通設定",
       "help": ""
     },
-    "Coalition": {
-      "name": "ネオンシティの探索者",
-      "help": ""
-    },
     "Event": {
       "name": "イベント海域",
       "help": ""
     },
     "Event2": {
       "name": "イベント海域-2",
+      "help": ""
+    },
+    "Event3": {
+      "name": "イベント海域-3",
       "help": ""
     },
     "Raid": {
@@ -86,16 +86,16 @@
       "name": "病院探訪",
       "help": ""
     },
+    "Coalition": {
+      "name": "ネオンシティの探索者",
+      "help": ""
+    },
     "MaritimeEscort": {
       "name": "Maritime Escort",
       "help": ""
     },
     "WarArchives": {
       "name": "作戦履歴",
-      "help": ""
-    },
-    "CoalitionSp": {
-      "name": "ネオンシティの探索者SP",
       "help": ""
     },
     "EventA": {
@@ -120,6 +120,14 @@
     },
     "RaidDaily": {
       "name": "Raid Daily",
+      "help": ""
+    },
+    "EventStory": {
+      "name": "Task.EventStory.name",
+      "help": "Task.EventStory.help"
+    },
+    "CoalitionSp": {
+      "name": "ネオンシティの探索者SP",
       "help": ""
     },
     "Commission": {
@@ -148,6 +156,10 @@
     },
     "Reward": {
       "name": "収穫",
+      "help": ""
+    },
+    "Oilkeep": {
+      "name": "オイルバランス",
       "help": ""
     },
     "Awaken": {
@@ -189,6 +201,18 @@
     "Minigame": {
       "name": "Task.Minigame.name",
       "help": ""
+    },
+    "Smallevent": {
+      "name": "Task.Smallevent.name",
+      "help": "Task.Smallevent.help"
+    },
+    "ShipIr": {
+      "name": "Task.ShipIr.name",
+      "help": "Task.ShipIr.help"
+    },
+    "PrivateQuarters": {
+      "name": "Task.PrivateQuarters.name",
+      "help": "Task.PrivateQuarters.help"
     },
     "OpsiGeneral": {
       "name": "一般設定",
@@ -256,10 +280,6 @@
     },
     "OpsiDaemon": {
       "name": "セイレーン作戦半自動",
-      "help": ""
-    },
-    "EventStory": {
-      "name": "Event Story",
       "help": ""
     },
     "Benchmark": {
@@ -503,6 +523,42 @@
       "help": "GuildCoin.Record.help"
     }
   },
+  "SevenDayStatus": {
+    "_info": {
+      "name": "SevenDayStatus._info.name",
+      "help": "SevenDayStatus._info.help"
+    },
+    "Value": {
+      "name": "SevenDayStatus.Value.name",
+      "help": "SevenDayStatus.Value.help"
+    },
+    "Color": {
+      "name": "SevenDayStatus.Color.name",
+      "help": "SevenDayStatus.Color.help"
+    },
+    "Record": {
+      "name": "SevenDayStatus.Record.name",
+      "help": "SevenDayStatus.Record.help"
+    }
+  },
+  "ResearchPercent": {
+    "_info": {
+      "name": "ResearchPercent._info.name",
+      "help": "ResearchPercent._info.help"
+    },
+    "Value": {
+      "name": "ResearchPercent.Value.name",
+      "help": "ResearchPercent.Value.help"
+    },
+    "Color": {
+      "name": "ResearchPercent.Color.name",
+      "help": "ResearchPercent.Color.help"
+    },
+    "Record": {
+      "name": "ResearchPercent.Record.name",
+      "help": "ResearchPercent.Record.help"
+    }
+  },
   "Scheduler": {
     "_info": {
       "name": "Scheduler._info.name",
@@ -553,6 +609,7 @@
       "com.YoStarJP.AzurLane": "JP",
       "com.hkmanjuu.azurlane.gp": "TW",
       "com.bilibili.blhx.huawei": "CN com.bilibili.blhx.huawei",
+      "com.bilibili.blhx.honor": "CN com.bilibili.blhx.honor",
       "com.bilibili.blhx.mi": "CN com.bilibili.blhx.mi",
       "com.tencent.tmgp.bilibili.blhx": "CN com.tencent.tmgp.bilibili.blhx",
       "com.bilibili.blhx.baidu": "CN com.bilibili.blhx.baidu",
@@ -751,6 +808,10 @@
       "stay_there": "stay_there",
       "goto_main": "goto_main",
       "close_game": "close_game"
+    },
+    "otherLoginTime": {
+      "name": "Optimization.otherLoginTime.name",
+      "help": "Optimization.otherLoginTime.help"
     }
   },
   "DropRecord": {
@@ -793,6 +854,35 @@
       "help": "DropRecord.CombatRecord.help",
       "do_not": "do_not",
       "save": "save"
+    },
+    "NewShipRecord": {
+      "name": "DropRecord.NewShipRecord.name",
+      "help": "DropRecord.NewShipRecord.help",
+      "do_not": "do_not",
+      "save": "save"
+    },
+    "NewShipOcrMethod": {
+      "name": "DropRecord.NewShipOcrMethod.name",
+      "help": "DropRecord.NewShipOcrMethod.help",
+      "LOCAL": "LOCAL",
+      "API_BASIC": "API_BASIC",
+      "API_ACCURATE": "API_ACCURATE"
+    },
+    "BaiduAPIKey": {
+      "name": "DropRecord.BaiduAPIKey.name",
+      "help": "DropRecord.BaiduAPIKey.help"
+    },
+    "BaiduAPISecret": {
+      "name": "DropRecord.BaiduAPISecret.name",
+      "help": "DropRecord.BaiduAPISecret.help"
+    },
+    "VolcAPIKey": {
+      "name": "DropRecord.VolcAPIKey.name",
+      "help": "DropRecord.VolcAPIKey.help"
+    },
+    "VolcAPISecret": {
+      "name": "DropRecord.VolcAPISecret.name",
+      "help": "DropRecord.VolcAPISecret.help"
     },
     "OpsiRecord": {
       "name": "DropRecord.OpsiRecord.name",
@@ -840,6 +930,12 @@
       "help": "OneClickRetire.KeepLimitBreak.help",
       "keep_limit_break": "keep_limit_break",
       "do_not_keep": "do_not_keep"
+    },
+    "modify_one_click_retire": {
+      "name": "一括退役設定の修正を試みる",
+      "help": "一括退役が実行できない場合、設定の修正を試みます",
+      "do_not_modify": "修正しない",
+      "modify": "修正を試みる"
     }
   },
   "Enhance": {
@@ -981,6 +1077,7 @@
       "event_20250227_cn": "籠檻に囚われし神光",
       "event_20250424_cn": "チュリッパの海へ",
       "event_20250520_cn": "高い塔の薔薇",
+      "event_20250724_cn": "錬金術士と天空邂逅の塔",
       "raid_20200624": "特別演習超空強襲波（復刻）",
       "raid_20210708": "交錯する新たな波 (復刻)",
       "raid_20220127": "秘密事件調査",
@@ -1028,7 +1125,9 @@
       "war_archives_20220224_cn": "檔案 鳴動せし星霜の淵",
       "war_archives_20220324_cn": "檔案 幻像の塔",
       "war_archives_20220414_cn": "檔案 極夜照らす幻光",
-      "war_archives_20220526_cn": "檔案 诚閃の剣 搖光の城"
+      "war_archives_20220428_cn": "檔案 吟ずる瑠璃の楽章",
+      "war_archives_20220526_cn": "檔案 诚閃の剣 搖光の城",
+      "war_archives_20220728_cn": "檔案 鋼鷲の冒険譚"
     },
     "Mode": {
       "name": "Campaign.Mode.name",
@@ -1090,6 +1189,73 @@
     "ReachLevel": {
       "name": "StopCondition.ReachLevel.name",
       "help": "StopCondition.ReachLevel.help"
+    }
+  },
+  "RegularInspections": {
+    "_info": {
+      "name": "RegularInspections._info.name",
+      "help": "RegularInspections._info.help"
+    },
+    "CurrentCampaignTimes": {
+      "name": "RegularInspections.CurrentCampaignTimes.name",
+      "help": "RegularInspections.CurrentCampaignTimes.help"
+    },
+    "CheckInterval": {
+      "name": "RegularInspections.CheckInterval.name",
+      "help": "RegularInspections.CheckInterval.help"
+    },
+    "IsResearchInspect": {
+      "name": "RegularInspections.IsResearchInspect.name",
+      "help": "RegularInspections.IsResearchInspect.help"
+    },
+    "ResearchInspectNotify": {
+      "name": "RegularInspections.ResearchInspectNotify.name",
+      "help": "RegularInspections.ResearchInspectNotify.help"
+    },
+    "IsFleetInspect": {
+      "name": "RegularInspections.IsFleetInspect.name",
+      "help": "RegularInspections.IsFleetInspect.help"
+    },
+    "FleetInspectIndex": {
+      "name": "RegularInspections.FleetInspectIndex.name",
+      "help": "RegularInspections.FleetInspectIndex.help",
+      "0": "0",
+      "1": "1",
+      "2": "2",
+      "3": "3",
+      "4": "4",
+      "5": "5",
+      "6": "6"
+    },
+    "FleetInspectInfo": {
+      "name": "RegularInspections.FleetInspectInfo.name",
+      "help": "RegularInspections.FleetInspectInfo.help"
+    }
+  },
+  "EventPt": {
+    "_info": {
+      "name": "EventPt._info.name",
+      "help": "EventPt._info.help"
+    },
+    "EventPtSwitch": {
+      "name": "EventPt.EventPtSwitch.name",
+      "help": "EventPt.EventPtSwitch.help"
+    },
+    "Event2MapName": {
+      "name": "EventPt.Event2MapName.name",
+      "help": "EventPt.Event2MapName.help"
+    },
+    "EventDailyAMapName": {
+      "name": "EventPt.EventDailyAMapName.name",
+      "help": "EventPt.EventDailyAMapName.help"
+    },
+    "EventDailySpMapName": {
+      "name": "EventPt.EventDailySpMapName.name",
+      "help": "EventPt.EventDailySpMapName.help"
+    },
+    "EventDailyCD": {
+      "name": "EventPt.EventDailyCD.name",
+      "help": "EventPt.EventDailyCD.help"
     }
   },
   "Fleet": {
@@ -1477,6 +1643,10 @@
     "LastStage": {
       "name": "EventDaily.LastStage.name",
       "help": "EventDaily.LastStage.help"
+    },
+    "SyncEmotion": {
+      "name": "EventDaily.SyncEmotion.name",
+      "help": "EventDaily.SyncEmotion.help"
     }
   },
   "Raid": {
@@ -1515,6 +1685,10 @@
     "UseRecommendFleet": {
       "name": "Hospital.UseRecommendFleet.name",
       "help": "Hospital.UseRecommendFleet.help"
+    },
+    "mapName": {
+      "name": "Hospital.mapName.name",
+      "help": "Hospital.mapName.help"
     }
   },
   "MaritimeEscort": {
@@ -1531,6 +1705,10 @@
     "_info": {
       "name": "Coalition._info.name",
       "help": "Coalition._info.help"
+    },
+    "UseRecommendFleet": {
+      "name": "Coalition.UseRecommendFleet.name",
+      "help": "Coalition.UseRecommendFleet.help"
     },
     "Mode": {
       "name": "Coalition.Mode.name",
@@ -1664,19 +1842,33 @@
       "name": "Research.AllowDelay.name",
       "help": "Research.AllowDelay.help"
     },
+    "AllowNone": {
+      "name": "Research.AllowNone.name",
+      "help": "Research.AllowNone.help"
+    },
+    "CheckSeries": {
+      "name": "研究シリーズの確認",
+      "help": "現在選択されている研究シリーズを検出し、対応する戦略に切り替えます",
+      "change_series_only": "シリーズのみ切り替え（タイプは維持）",
+      "change_series_normal": "シリーズ切り替え（設計図＋装備）",
+      "not_change": "シリーズを切り替えない"
+    },
     "PresetFilter": {
       "name": "Research.PresetFilter.name",
       "help": "Research.PresetFilter.help",
       "custom": "custom",
-      "series_7_blueprint_la9": "series_7_blueprint_la9",
-      "series_7_blueprint_only": "series_7_blueprint_only",
-      "series_7_la9_only": "series_7_la9_only",
-      "series_6_blueprint_203": "series_6_blueprint_203",
-      "series_6_blueprint_only": "series_6_blueprint_only",
-      "series_6_203_only": "series_6_203_only",
-      "series_5_blueprint_152": "series_5_blueprint_152",
-      "series_5_blueprint_only": "series_5_blueprint_only",
-      "series_5_152_only": "series_5_152_only",
+      "series_8_blueprint_305": "Series 8 Blueprints+305",
+      "series_8_blueprint_only": "Series 8 Blueprints Only",
+      "series_8_305_only": "Series 8 305 Only",
+      "series_7_blueprint_la9": "Series 7 Blueprints+La9",
+      "series_7_blueprint_only": "Series 7 Blueprints Only",
+      "series_7_la9_only": "Series 7 La9 Only",
+      "series_6_blueprint_203": "Series 6 Blueprints+203",
+      "series_6_blueprint_only": "Series 6 Blueprints Only",
+      "series_6_203_only": "Series 6 203 Only",
+      "series_5_blueprint_152": "Series 5 Blueprints+152",
+      "series_5_blueprint_only": "Series 5 Blueprints Only",
+      "series_5_152_only": "Series 5 152 Only",
       "series_4_blueprint_tenrai": "Series 4 Blueprints+Tenrai",
       "series_4_blueprint_only": "Series 4 Blueprints Only",
       "series_4_tenrai_only": "Series 4 Tenrai Only",
@@ -1861,6 +2053,10 @@
       "help": "Awaken.LevelCap.help",
       "level120": "level120",
       "level125": "level125"
+    },
+    "Favourite": {
+      "name": "Awaken.Favourite.name",
+      "help": "Awaken.Favourite.help"
     }
   },
   "GeneralShop": {
@@ -2087,6 +2283,37 @@
       "help": "CoreShop.Filter.help"
     }
   },
+  "EventShop": {
+    "_info": {
+      "name": "EventShop._info.name",
+      "help": "EventShop._info.help"
+    },
+    "Enable": {
+      "name": "EventShop.Enable.name",
+      "help": "EventShop.Enable.help"
+    },
+    "UnlockShipSSR": {
+      "name": "EventShop.UnlockShipSSR.name",
+      "help": "EventShop.UnlockShipSSR.help"
+    },
+    "BuyShipUR": {
+      "name": "EventShop.BuyShipUR.name",
+      "help": "EventShop.BuyShipUR.help",
+      "0": "0",
+      "1": "1",
+      "2": "2"
+    },
+    "PresetFilter": {
+      "name": "EventShop.PresetFilter.name",
+      "help": "EventShop.PresetFilter.help",
+      "all": "all",
+      "custom": "custom"
+    },
+    "CustomFilter": {
+      "name": "EventShop.CustomFilter.name",
+      "help": "EventShop.CustomFilter.help"
+    }
+  },
   "ShipyardDr": {
     "_info": {
       "name": "ShipyardDr._info.name",
@@ -2265,6 +2492,62 @@
     "Collect": {
       "name": "Minigame.Collect.name",
       "help": "Minigame.Collect.help"
+    }
+  },
+  "Smallevent": {
+    "_info": {
+      "name": "Smallevent._info.name",
+      "help": "Smallevent._info.help"
+    },
+    "SevenDayTask": {
+      "name": "Smallevent.SevenDayTask.name",
+      "help": "Smallevent.SevenDayTask.help"
+    },
+    "UpdateInfoImmediately": {
+      "name": "Smallevent.UpdateInfoImmediately.name",
+      "help": "Smallevent.UpdateInfoImmediately.help"
+    },
+    "OcrModel": {
+      "name": "Smallevent.OcrModel.name",
+      "help": "Smallevent.OcrModel.help",
+      "baidu": "baidu",
+      "volc": "volc"
+    }
+  },
+  "Oilkeep": {
+    "_info": {
+      "name": "Oilkeep._info.name",
+      "help": "Oilkeep._info.help"
+    },
+    "OilkeepLevel": {
+      "name": "Oilkeep.OilkeepLevel.name",
+      "help": "Oilkeep.OilkeepLevel.help"
+    },
+    "OilMaxGet": {
+      "name": "Oilkeep.OilMaxGet.name",
+      "help": "Oilkeep.OilMaxGet.help"
+    }
+  },
+  "PrivateQuarters": {
+    "_info": {
+      "name": "PrivateQuarters._info.name",
+      "help": "PrivateQuarters._info.help"
+    },
+    "BuyRoses": {
+      "name": "PrivateQuarters.BuyRoses.name",
+      "help": "PrivateQuarters.BuyRoses.help"
+    },
+    "TargetInteract": {
+      "name": "PrivateQuarters.TargetInteract.name",
+      "help": "PrivateQuarters.TargetInteract.help"
+    },
+    "TargetShip": {
+      "name": "PrivateQuarters.TargetShip.name",
+      "help": "PrivateQuarters.TargetShip.help",
+      "anchorage": "anchorage",
+      "noshiro": "noshiro",
+      "sirius": "sirius",
+      "new_jersey": "new_jersey"
     }
   },
   "Daily": {
@@ -2471,6 +2754,52 @@
       "10": "10"
     }
   },
+  "ShipIr": {
+    "_info": {
+      "name": "ShipIr._info.name",
+      "help": "ShipIr._info.help"
+    },
+    "check_filter_show_1": {
+      "name": "ShipIr.check_filter_show_1.name",
+      "help": "ShipIr.check_filter_show_1.help"
+    },
+    "check_filter_result_1": {
+      "name": "ShipIr.check_filter_result_1.name",
+      "help": "ShipIr.check_filter_result_1.help"
+    },
+    "check_filter_show_2": {
+      "name": "ShipIr.check_filter_show_2.name",
+      "help": "ShipIr.check_filter_show_2.help"
+    },
+    "check_filter_result_2": {
+      "name": "ShipIr.check_filter_result_2.name",
+      "help": "ShipIr.check_filter_result_2.help"
+    },
+    "check_filter_show_3": {
+      "name": "ShipIr.check_filter_show_3.name",
+      "help": "ShipIr.check_filter_show_3.help"
+    },
+    "check_filter_result_3": {
+      "name": "ShipIr.check_filter_result_3.name",
+      "help": "ShipIr.check_filter_result_3.help"
+    },
+    "check_filter_show_4": {
+      "name": "ShipIr.check_filter_show_4.name",
+      "help": "ShipIr.check_filter_show_4.help"
+    },
+    "check_filter_result_4": {
+      "name": "ShipIr.check_filter_result_4.name",
+      "help": "ShipIr.check_filter_result_4.help"
+    },
+    "check_filter_show_5": {
+      "name": "ShipIr.check_filter_show_5.name",
+      "help": "ShipIr.check_filter_show_5.help"
+    },
+    "check_filter_result_5": {
+      "name": "ShipIr.check_filter_result_5.name",
+      "help": "ShipIr.check_filter_result_5.help"
+    }
+  },
   "OpsiAshAssist": {
     "_info": {
       "name": "OpsiAshAssist._info.name",
@@ -2596,6 +2925,10 @@
       "name": "OpsiShop._info.name",
       "help": "OpsiShop._info.help"
     },
+    "BuySpecialRadar": {
+      "name": "戦闘情報記録器購入",
+      "help": "戦闘情報記録器（5000油道具）自動購入"
+    },
     "PresetFilter": {
       "name": "OpsiShop.PresetFilter.name",
       "help": "OpsiShop.PresetFilter.help",
@@ -2705,6 +3038,10 @@
     "TargetZone": {
       "name": "OpsiMeowfficerFarming.TargetZone.name",
       "help": "OpsiMeowfficerFarming.TargetZone.help"
+    },
+    "IgnoreStory": {
+      "name": "OpsiMeowfficerFarming.IgnoreStory.name",
+      "help": "OpsiMeowfficerFarming.IgnoreStory.help"
     }
   },
   "OpsiHazard1Leveling": {
@@ -2742,18 +3079,6 @@
     "SelectEnemy": {
       "name": "OpsiDaemon.SelectEnemy.name",
       "help": "OpsiDaemon.SelectEnemy.help"
-    }
-  },
-  "EventStory": {
-    "_info": {
-      "name": "EventStory._info.name",
-      "help": "EventStory._info.help"
-    },
-    "SkipBattle": {
-      "name": "EventStory.SkipBattle.name",
-      "help": "EventStory.SkipBattle.help",
-      "True": "True",
-      "False": "False"
     }
   },
   "Benchmark": {
@@ -2796,6 +3121,46 @@
     "AutoRestart": {
       "name": "GameManager.AutoRestart.name",
       "help": "GameManager.AutoRestart.help"
+    }
+  },
+  "AutoRestart": {
+    "_info": {
+      "name": "AutoRestart._info.name",
+      "help": "AutoRestart._info.help"
+    },
+    "Enabled": {
+      "name": "AutoRestart.Enabled.name",
+      "help": "AutoRestart.Enabled.help"
+    },
+    "AttemptsToRestart": {
+      "name": "AutoRestart.AttemptsToRestart.name",
+      "help": "AutoRestart.AttemptsToRestart.help"
+    },
+    "NotifyWhenAutoRestart": {
+      "name": "AutoRestart.NotifyWhenAutoRestart.name",
+      "help": "AutoRestart.NotifyWhenAutoRestart.help"
+    }
+  },
+  "InstanceRestart": {
+    "_info": {
+      "name": "InstanceRestart._info.name",
+      "help": "InstanceRestart._info.help"
+    },
+    "Enabled": {
+      "name": "InstanceRestart.Enabled.name",
+      "help": "InstanceRestart.Enabled.help"
+    },
+    "AttemptsToRestart": {
+      "name": "InstanceRestart.AttemptsToRestart.name",
+      "help": "InstanceRestart.AttemptsToRestart.help"
+    },
+    "NotifyWhenAutoRestart": {
+      "name": "InstanceRestart.NotifyWhenAutoRestart.name",
+      "help": "InstanceRestart.NotifyWhenAutoRestart.help"
+    },
+    "HasRestarted": {
+      "name": "InstanceRestart.HasRestarted.name",
+      "help": "InstanceRestart.HasRestarted.help"
     }
   },
   "Storage": {
@@ -2876,6 +3241,8 @@
       "Medal": "Gui.Overview.Medal",
       "Core": "Gui.Overview.Core",
       "GuildCoin": "Gui.Overview.GuildCoin",
+      "SevenDayStatus": "Gui.Overview.SevenDayStatus",
+      "ResearchPercent": "Gui.Overview.ResearchPercent",
       "Log": "ログ",
       "Running": "実行中",
       "Pending": "隊列中",

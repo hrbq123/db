@@ -145,7 +145,7 @@ class Retirement(Enhancement, QuickRetireSettingHandler):
             # Equip confirm
             if self.appear_then_click(EQUIP_CONFIRM, offset=(30, 30), interval=2):
                 continue
-            if self.appear_then_click(EQUIP_CONFIRM_2, offset=(30, 30), interval=2):
+            if self.appear_then_click(EQUIP_CONFIRM_2, offset=(10, 10), interval=2):
                 self.interval_clear(GET_ITEMS_1)
                 executed = True
                 continue

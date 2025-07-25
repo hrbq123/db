@@ -56,6 +56,7 @@ class CampaignEvent(CampaignStatus):
             self.get_event_pt()
             return False
         if command in GEMS_FARMINGS and self.stage_is_main(self.config.Campaign_Name):
+            self.get_event_pt()
             return False
 
         pt = self.get_event_pt()
@@ -99,13 +100,14 @@ class CampaignEvent(CampaignStatus):
         Pages:
             in: page_event or page_sp
         """
-        from module.config.utils import deep_get
+        from module.config.deep import deep_get
         limit = self.config.TaskBalancer_CoinLimit
         coin = deep_get(self.config.data, 'Dashboard.Coin.Value')
         logger.attr('Coin Count', coin)
         tasks = [
             'Event',
             'Event2',
+            'Event3',
             'Raid',
             'GemsFarming',
         ]

@@ -4,7 +4,7 @@ from module.base.base import ModuleBase
 from module.base.button import Button
 from module.base.timer import Timer
 from module.base.utils import *
-from module.exception import GameNotRunningError
+from module.exception import GameNotRunningError, OtherLogin, RequestHumanTakeover
 from module.handler.assets import *
 from module.logger import logger
 from module.os_handler.assets import CLICK_SAFE_AREA as OS_CLICK_SAFE_AREA
@@ -34,7 +34,6 @@ class InfoHandler(ModuleBase):
     """
     Info bar
     """
-
     def info_bar_count(self):
         """
         Detect info bar by the blue lines on the top of it.
@@ -157,13 +156,31 @@ class InfoHandler(ModuleBase):
             bool:
         """
         appear = self.appear(GET_MISSION, offset=True, interval=2)
+        appear2 = self.appear(otherlogin, offset=True, interval=2,threshold=0.7)
+        dead_loop  = Button(area=(430, 328, 832, 356),color=(),button=(430, 328, 832, 356))
         if appear:
-            logger.info('Get urgent commission')
-            if drop:
-                self.handle_info_bar()
-                drop.add(self.device.image)
-            self.device.click(GET_MISSION)
-            self._hot_fix_check_wait.reset()
+            if not appear2:
+                self.device.sleep(2)
+                appear3 = self.appear(otherlogin, offset=True, interval=2,threshold=0.6)
+                if not appear3:
+                    from module.ocr.ocr import Ocr
+                    result = Ocr(dead_loop, lang="cnocr", letter=(255,255,247)).ocr(self.device.image)
+                    if "无法抵达" in result:
+                        logger.warning("OS: found dead loop in auto search")
+                        raise RequestHumanTakeover
+                    if "您在别" in result or "处登录" in result:
+                        logger.warning('Other login in')
+                        raise OtherLogin
+                    logger.info('Get urgent commission')
+                    if drop:
+                        self.handle_info_bar()
+                        drop.add(self.device.image)
+                    self.device.click(GET_MISSION)
+                    self._hot_fix_check_wait.reset()
+                    return False
+            if appear2 or appear3:
+                logger.warning('Other login in')
+                raise OtherLogin
 
         # Check game client existence after 3s to 6s
         # Hot fixes will kill AL if you clicked the confirm button

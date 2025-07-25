@@ -15,16 +15,19 @@ class ManualConfig:
     > Exercise
     > Dorm > Meowfficer > Guild > Gacha
     > Reward
-    > ShopFrequent > ShopOnce > Shipyard > Freebies
+    > ShopFrequent > ShopOnce > Shipyard > Freebies > Daily > Hard 
+    > Oilkeep > Event 
+    > PrivateQuarters
     > OpsiExplore
-    > Minigame > Awaken
+    > EventStory > Smallevent > Minigame > Awaken
     > OpsiAshBeacon
     > OpsiDaily > OpsiShop > OpsiVoucher
     > OpsiAbyssal > OpsiStronghold > OpsiObscure > OpsiArchive
-    > Daily > Hard > OpsiAshBeacon > OpsiAshAssist > OpsiMonthBoss
+    > OpsiAshBeacon > OpsiAshAssist > OpsiMonthBoss
     > Sos > EventSp > EventA > EventB > EventC > EventD
     > RaidDaily > CoalitionSp > WarArchives > MaritimeEscort
-    > Event > Event2 > Raid > Hospital > Coalition > Main > Main2 > Main3
+    > Event2 > Event3 > Raid > Hospital > Coalition > Main > Main3 > Main2
+    > ShipIr
     > OpsiMeowfficerFarming
     > GemsFarming
     > OpsiHazard1Leveling
@@ -58,7 +61,8 @@ class ManualConfig:
     STAGE_ENTRANCE = ['normal']  # normal, blue, half
     # Set stage='TH' and run_count=100, to run TH1~TH5 in cycle
     STAGE_LOOP_ALIAS = {
-        ('event_20221124_cn', 'TH'): 'TH1 > TH2 > TH3 > TH4 > TH5'
+        ('event_20221124_cn', 'TH'): 'TH1 > TH2 > TH3 > TH4 > TH5',
+        ('event_20250724_cn', 'TS'): 'TS1 > TS2 > TS3 > TS4 > TS5',
     }
 
     """
@@ -371,6 +375,11 @@ class ManualConfig:
     """
     # For dev purpose, auto extract new item templates
     SHOP_EXTRACT_TEMPLATE = False
+
+    """
+    module.event_shop
+    """
+    EVENT_SHOP_IGNORE_DEADLINE = False
 
     """
     module.war_archives

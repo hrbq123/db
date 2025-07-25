@@ -1,9 +1,10 @@
 import re
+import sys
+import time
+import queue
 import argparse
 import json
-import queue
 import threading
-import time
 from datetime import datetime
 from functools import partial
 from typing import Dict, List, Optional
@@ -12,7 +13,7 @@ from typing import Dict, List, Optional
 from module.webui.fake_pil_module import import_fake_pil_module
 
 import_fake_pil_module()
-
+from module.notify import handle_notify
 from pywebio import config as webconfig
 from pywebio.input import file_upload, input, input_group, select
 from pywebio.output import (
@@ -62,8 +63,8 @@ from module.webui.base import Frame
 from module.webui.discord_presence import close_discord_rpc, init_discord_rpc
 from module.webui.fastapi import asgi_app
 from module.webui.lang import _t, t
-from module.webui.pin import put_input, put_select, pin_update
-from module.webui.patch import patch_executor
+from module.webui.patch import patch_executor, patch_mimetype
+from module.webui.pin import put_input, put_select
 from module.webui.process_manager import ProcessManager
 from module.webui.remote_access import RemoteAccess
 from module.webui.setting import State
@@ -94,6 +95,7 @@ from module.webui.widgets import (
 )
 
 patch_executor()
+patch_mimetype()
 task_handler = TaskHandler()
 
 
@@ -141,7 +143,7 @@ class AlasGUI(Frame):
         self.alas_config = AzurLaneConfig("template")
         self.initial()
         # rendered state cache
-        self.rendered_cache = []
+        self.rendered_cache = {}
         self.inst_cache = []
         self.load_home = False
         self.af_flag = False
@@ -154,10 +156,42 @@ class AlasGUI(Frame):
             buttons=[{"label": t("Gui.Aside.Home"), "value": "Home", "color": "aside"}],
             onclick=[self.ui_develop],
         )
+
+        # Sort alas instances
+        instances = list(alas_instance())
+        numeric_instances = []
+        regular_instances = []
+        import re
+        
+        for name in instances:
+            # Check if instance name ends with number
+            match = re.search(r'\d+$', name)
+            if match:
+                # Get the numeric value at the end
+                num_val = int(match.group())
+                numeric_instances.append((num_val, name))
+            else:
+                regular_instances.append(name)
+        
+        # Sort numeric instances by their number
+        numeric_instances.sort(key=lambda x: x[0])
+        # Sort regular instances alphabetically
+        regular_instances.sort()
+        
+        # Display instances in order
         put_scope("aside_instance",[
-            put_scope(f"alas-instance-{i}",[])
-            for i, _ in enumerate(alas_instance())
+            put_scope(f"alas-instance-{name}",[])
+                for _, name in numeric_instances
         ])
+
+        for name in regular_instances:
+            put_icon_buttons(
+                Icon.RUN,
+                buttons=[{"label": name, "value": name, "color": "aside"}],
+                onclick=self.ui_alas,
+            )
+            
+
         self.set_aside_status()
         put_icon_buttons(
             Icon.SETTING,
@@ -179,14 +213,15 @@ class AlasGUI(Frame):
     def set_aside_status(self) -> None:
         flag = True       
         def update(name, seq):
-            with use_scope(f"alas-instance-{seq}", clear=True):
+            with use_scope(f"alas-instance-{name}", clear=True):
                 icon_html = Icon.RUN
                 rendered_state = ProcessManager.get_manager(inst).state
+                if rendered_state == 4: rendered_state = 2
                 if rendered_state == 1 and self.af_flag:
                     icon_html = icon_html[:31] + ' anim-rotate' + icon_html[31:]
                 put_icon_buttons(
                     icon_html,
-                    buttons=[{"label": name, "value": name, "color": "aside"}],
+                    buttons=[{"label": name, "value": name, "color": f"aside-{rendered_state}"}],
                     onclick=self.ui_alas,
                 )
             return rendered_state
@@ -195,19 +230,24 @@ class AlasGUI(Frame):
             # Reload when add/delete new instance | first start app.py | go to HomePage (HomePage load call force reload)
             flag = False
             self.inst_cache.clear()
-            self.inst_cache = alas_instance()
+            for name in alas_instance():
+                match = re.search(r'\d+$', name)
+                if match:
+                    num_val = int(match.group())
+                    self.inst_cache.append((num_val, name))
+            self.inst_cache.sort(key=lambda x: x[0])
         if flag:
-            for index, inst in enumerate(self.inst_cache):
+            for index, inst in self.inst_cache:
                 # Check for state change
                 state = ProcessManager.get_manager(inst).state
-                if state != self.rendered_cache[index]:
-                    self.rendered_cache[index] = update(inst, index)
+                if state != self.rendered_cache[inst]:
+                    self.rendered_cache[inst] = update(inst, index)
                     flag = False
         else:
             self.rendered_cache.clear()
             clear("aside_instance")
-            for index, inst in enumerate(self.inst_cache):
-                self.rendered_cache.append(update(inst, index))
+            for index, inst in self.inst_cache:
+                self.rendered_cache[inst] = update(inst, index)
             self.load_home = False
         if not flag:
             # Redraw lost focus, now focus on aside button
@@ -1613,7 +1653,48 @@ def clearup():
     task_handler.stop()
     logger.info("Alas closed.")
 
+g_instance_watcher: threading.Thread = None
+g_instance_restart_too_many_times: List[str] = list()
 
+def instance_watcher_thread():
+    global g_instance_restart_too_many_times
+    while 1:
+        time.sleep(10)
+        try:
+            for instance in alas_instance():
+                ins = ProcessManager.get_manager(instance)
+                config = AzurLaneConfig(ins.config_name)
+
+                enabled = deep_get(config.data, "Restart.InstanceRestart.Enabled", False)
+
+                if enabled and ins.state == 3 and not ins.alive:
+                    attempts = deep_get(config.data, "Restart.InstanceRestart.AttemptsToRestart", 3)
+                    has_restarted = deep_get(config.data, "Restart.InstanceRestart.HasRestarted", 0)
+                    enable_notify = deep_get(config.data, "Restart.InstanceRestart.NotifyWhenAutoRestart", False)
+                    push_config = deep_get(config.data, "Alas.Error.OnePushConfig")
+
+                    if has_restarted <= attempts and ins.config_name not in g_instance_restart_too_many_times:
+                        ins.start("alas")
+                        config.modified["Restart.InstanceRestart.HasRestarted"] = has_restarted + 1
+                        config.save()
+
+                        if enable_notify:
+                            handle_notify(
+                                push_config,
+                                title=f"Alas <{ins.config_name}> instance auto restarted",
+                                content=f"Critical error occurred, instance restarted",
+                            )
+                    else:
+                        config.modified["Restart.InstanceRestart.HasRestarted"] = 0
+                        config.save()
+                        g_instance_restart_too_many_times.append(ins.config_name)
+                        handle_notify(
+                            push_config,
+                            title=f"Alas <{ins.config_name}> instance restarted too many times",
+                            content=f"Too many critical error occurred, instance restarted too many times",
+                        )
+        except:
+            ...
 def app():
     parser = argparse.ArgumentParser(description="Alas web service")
     parser.add_argument(
@@ -1652,6 +1733,11 @@ def app():
     logger.attr("Password", True if key else False)
     logger.attr("CDN", cdn)
     logger.attr("IS_ON_PHONE_CLOUD", IS_ON_PHONE_CLOUD)
+
+    global g_instance_watcher
+    if g_instance_watcher is None:
+        g_instance_watcher = threading.Thread(target=instance_watcher_thread)
+        g_instance_watcher.start()
 
     from deploy.atomic import atomic_failure_cleanup
     atomic_failure_cleanup('./config')

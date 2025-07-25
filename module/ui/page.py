@@ -7,7 +7,7 @@ from module.raid.assets import *
 from module.retire.assets import DOCK_CHECK
 from module.ui.assets import *
 from module.ui_white.assets import *
-
+from module.ship_ir.assets import HANDBOOK_CHECK,MAIN_GOTO_COLLECTION,MAIN_GOTO_COLLECTION_WHITE,COLLECTION_CHECK,COLLECTION_GOTO_HANDBOOK
 
 class Page:
     # Key: str, page name like "page_main"
@@ -216,6 +216,22 @@ page_dock.link(button=GOTO_MAIN, destination=page_main)
 page_main.link(button=MAIN_GOTO_DOCK, destination=page_dock)
 page_main_white.link(button=MAIN_GOTO_DOCK_WHITE, destination=page_dock)
 
+# Main_memory 
+page_main_memory = Page(MAIN_GOTO_MEMORIES_WHITE)
+page_main.link(button=MAIN_TAB_SWITCH_WHITE, destination=page_main_memory)
+page_main_white.link(button=MAIN_TAB_SWITCH_WHITE, destination=page_main_memory)
+
+#Collection
+page_collection = Page(COLLECTION_CHECK)
+page_collection.link(button=GOTO_MAIN, destination=page_main)
+page_main.link(button=MAIN_GOTO_COLLECTION, destination=page_collection)
+page_main_memory.link(button=MAIN_GOTO_COLLECTION_WHITE, destination=page_collection)
+
+#Handbook
+page_handbook = Page(HANDBOOK_CHECK)
+page_handbook.link(button=GOTO_MAIN, destination=page_main)
+page_collection.link(button=COLLECTION_GOTO_HANDBOOK, destination=page_handbook)
+
 # Research
 # Please don't goto page_research from page_reward.
 page_research = Page(RESEARCH_CHECK)
@@ -265,6 +281,11 @@ page_meowfficer.link(button=MEOWFFICER_GOTO_DORMMENU, destination=page_main)
 page_academy = Page(ACADEMY_CHECK)
 page_dormmenu.link(button=DORMMENU_GOTO_ACADEMY, destination=page_academy)
 page_academy.link(button=GOTO_MAIN, destination=page_main)
+
+# Private Quarters
+page_private_quarters = Page(PRIVATE_QUARTERS_CHECK)
+page_dormmenu.link(button=DORMMENU_GOTO_PRIVATE_QUARTERS, destination=page_private_quarters)
+page_private_quarters.link(button=PQ_GOTO_MAIN, destination=page_main)
 
 # Game room & choose game
 page_game_room = Page(GAME_ROOM_CHECK)

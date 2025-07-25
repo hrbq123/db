@@ -7,6 +7,7 @@ from module.handler.assets import *
 from module.handler.auto_search import AutoSearchHandler
 from module.logger import logger
 from module.ui.switch import Switch
+from module.notify import handle_notify
 
 FAST_FORWARD = Switch('Fast_Forward')
 FAST_FORWARD.add_state('on', check_button=FAST_FORWARD_ON)
@@ -122,8 +123,8 @@ class FastForwardHandler(AutoSearchHandler):
         'C1 > C2 > C3',
         'D1 > D2 > D3',
         'SP1 > SP2 > SP3 > SP4 > SP5',
-        'T1 > T2 > T3 > T4',
-        'HT1 > HT2 > HT3 > HT4',
+        'T1 > T2 > T3 > T4 > T5 > T6',
+        'HT1 > HT2 > HT3 > HT4 > HT5 > HT6',
     ]
     map_fleet_checked = False
 
@@ -433,7 +434,49 @@ class FastForwardHandler(AutoSearchHandler):
                 self.config.Campaign_Name = next_stage
             else:
                 logger.info(f'Stage {prev_stage} cannot increase, stop at current stage')
+                
+                handle_notify(
+                    self.config.Error_OnePushConfig,
+                    title=f"Alas <{self.config.config_name}> campaign over",
+                    content=f"<{self.config.config_name}> {prev_stage} reached end"
+                )
                 self.config.Scheduler_Enable = False
+                if self.config.task.command == 'Event'and self.config.EventPt_EventPtSwitch == True:      
+                    # logger.warning(f'{self.config.task.command}')
+                    #心情值和设置处理
+                    KEYS = ['.Fleet.Fleet1','.Fleet.Fleet2','.Fleet.FleetOrder','.Emotion.Fleet1Record','.Emotion.Fleet1Recover','.Emotion.Fleet2Record','.Emotion.Fleet2Recover',]
+                    for key in KEYS:#只传舰队和心情恢复设置,不传心情值
+                        data = self.config.cross_get(keys=f'Event{key}')
+                        self.config.cross_set(keys=f'EventA{key}', value=f'{data}')
+                        # self.config.cross_set(keys=f'EventB{key}', value=f'{data}')
+                        self.config.cross_set(keys=f'EventC{key}', value=f'{data}')
+                        self.config.cross_set(keys=f'EventD{key}', value=f'{data}')
+                        self.config.cross_set(keys=f'Event2{key}', value=f'{data}')
+                        logger.hr(f"copy:{key},{data}")
+                    KEYS2 = ['.Emotion.Fleet1Value','.Emotion.Fleet2Value',]
+                    for key in KEYS2:#单独给每日D和活动图2传心情值(因为结尾关D3心情一致)
+                        data = self.config.cross_get(keys=f'Event{key}')
+                        self.config.cross_set(keys=f'EventD{key}', value=f'{data}')
+                        self.config.cross_set(keys=f'Event2{key}', value=f'{data}')
+                        logger.hr(f"copy:{key},{data}")
+
+
+                    ##TASK_CALL##
+                    self.config.cross_set(keys=f'Event2.Campaign.Name',value = f'{self.config.EventPt_Event2MapName}')
+                    self.config.task_call('Event2')
+                    if self.config.EventPt_EventDailyAMapName != False:
+                        self.config.cross_set(keys=f'EventA.EventDaily.StageFilter', value=f'{self.config.EventPt_EventDailyAMapName}')  #ab图一般用同一队,所以为了心情同步用同一队
+                        self.config.task_call('EventA')
+                    if self.config.EventPt_EventDailySpMapName != False:
+                        self.config.cross_set(keys=f'EventSp.EventDaily.StageFilter',value = f'{self.config.EventPt_EventDailySpMapName}') 
+                        self.config.task_call('EventSp')
+                    if self.config.EventPt_EventDailyCD != False:
+                        self.config.cross_set(keys=f'EventC.EventDaily.StageFilter', value=f'{self.config.EventPt_EventDailyCD}')
+                        self.config.task_call('EventC')
+                    
+                
+                # logger.info(f"{self.config.Fleet_FleetOrder},{self.config.Emotion_Fleet1Value},{self.config.Emotion_Fleet1Recover}")
+
         else:
             self.config.Scheduler_Enable = False
 

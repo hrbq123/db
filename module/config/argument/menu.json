@@ -23,11 +23,12 @@
     "page": "setting",
     "tasks": [
       "EventGeneral",
-      "Coalition",
       "Event",
       "Event2",
+      "Event3",
       "Raid",
       "Hospital",
+      "Coalition",
       "MaritimeEscort",
       "WarArchives"
     ]
@@ -36,13 +37,14 @@
     "menu": "collapse",
     "page": "setting",
     "tasks": [
-      "CoalitionSp",
       "EventA",
       "EventB",
       "EventC",
       "EventD",
       "EventSp",
-      "RaidDaily"
+      "RaidDaily",
+      "EventStory",
+      "CoalitionSp"
     ]
   },
   "Reward": {
@@ -56,6 +58,7 @@
       "Meowfficer",
       "Guild",
       "Reward",
+      "Oilkeep",
       "Awaken"
     ]
   },
@@ -71,7 +74,10 @@
       "Shipyard",
       "Gacha",
       "Freebies",
-      "Minigame"
+      "Minigame",
+      "Smallevent",
+      "ShipIr",
+      "PrivateQuarters"
     ]
   },
   "Opsi": {
@@ -101,7 +107,6 @@
     "tasks": [
       "Daemon",
       "OpsiDaemon",
-      "EventStory",
       "Benchmark",
       "AzurLaneUncensored",
       "GameManager"

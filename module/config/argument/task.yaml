@@ -21,6 +21,7 @@ Alas:
       - OldRetire
     Restart:
       - Scheduler
+      - AutoRestart
 
 # ==================== Farm ====================
 
@@ -41,6 +42,7 @@ Farm:
       - Scheduler
       - Campaign
       - StopCondition
+      - RegularInspections
       - Fleet
       - Submarine
       - Emotion
@@ -71,13 +73,17 @@ Event:
     EventGeneral:
       - EventGeneral
       - TaskBalancer
-    Coalition:
+    Event:
       - Scheduler
       - Campaign
-      - Coalition
       - StopCondition
+      - EventPt
+      - Fleet
+      - Submarine
       - Emotion
-    Event:
+      - HpControl
+      - EnemyPriority
+    Event2:
       - Scheduler
       - Campaign
       - StopCondition
@@ -86,7 +92,7 @@ Event:
       - Emotion
       - HpControl
       - EnemyPriority
-    Event2:
+    Event3:
       - Scheduler
       - Campaign
       - StopCondition
@@ -105,6 +111,13 @@ Event:
       - Scheduler
       - Hospital
       - StopCondition
+      - Emotion
+    Coalition:
+      - Scheduler
+      - Campaign
+      - Coalition
+      - StopCondition
+      - EventPt
       - Emotion
     MaritimeEscort:
       - Scheduler
@@ -126,12 +139,6 @@ EventDaily:
   menu: 'collapse'
   page: 'setting'
   tasks:
-    CoalitionSp:
-      - Scheduler
-      - Campaign
-      - Coalition
-      - StopCondition
-      - Emotion
     EventA:
       - Scheduler
       - EventDaily
@@ -174,6 +181,7 @@ EventDaily:
       - EnemyPriority
     EventSp:
       - Scheduler
+      - EventDaily
       - Campaign
       - StopCondition
       - Fleet
@@ -185,6 +193,14 @@ EventDaily:
       - Scheduler
       - RaidDaily
       - Campaign
+      - StopCondition
+      - Emotion
+    EventStory:
+      - Scheduler
+    CoalitionSp:
+      - Scheduler
+      - Campaign
+      - Coalition
       - StopCondition
       - Emotion
 
@@ -220,6 +236,9 @@ Reward:
     Reward:
       - Scheduler
       - Reward
+    Oilkeep:
+      - Scheduler
+      - Oilkeep
     Awaken:
       - Scheduler
       - Awaken
@@ -248,6 +267,7 @@ DailyMission:
       - MedalShop2
       - MeritShop
       - CoreShop
+      - EventShop
     Shipyard:
       - Scheduler
       - ShipyardDr
@@ -263,6 +283,15 @@ DailyMission:
       - SupplyPack
     Minigame:
       - Scheduler
+    Smallevent:
+      - Scheduler
+      - Smallevent
+    ShipIr:
+      - Scheduler
+      - ShipIr
+    PrivateQuarters:
+      - Scheduler
+      - PrivateQuarters
 
 # ==================== Opsi ====================
 
@@ -332,8 +361,6 @@ Tool:
       - Daemon
     OpsiDaemon:
       - OpsiDaemon
-    EventStory:
-      - EventStory
     Benchmark:
       - Benchmark
     AzurLaneUncensored:

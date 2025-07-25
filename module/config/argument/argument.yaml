@@ -54,7 +54,14 @@ GuildCoin:
   Value: 0
   Color: ^AAAAAA
   Record: 2020-01-01 00:00:00
-
+SevenDayStatus:
+  Value: 0
+  Color: ^AFAAAA
+  Record: 2020-01-01 00:00:00
+ResearchPercent:
+  Value: 0
+  Color: ^0000FF
+  Record: 2020-01-01 00:00:00
 # ==================== Alas ====================
 
 Scheduler:
@@ -148,6 +155,9 @@ Optimization:
   WhenTaskQueueEmpty:
     value: goto_main
     option: [ stay_there, goto_main, close_game ]
+  otherLoginTime:
+    value: 15,30,60
+    type: textarea
 DropRecord:
   SaveFolder: ./screenshots
   AzurStatsID: null
@@ -163,6 +173,28 @@ DropRecord:
   CombatRecord:
     value: do_not
     option: [ do_not, save ]
+  NewShipRecord:
+    value: do_not
+    option: [ do_not, save ]
+  NewShipOcrMethod:
+    value: LOCAL
+    option: [ LOCAL, API_BASIC, API_ACCURATE ]
+  BaiduAPIKey:
+    type: textarea
+    mode: yaml
+    value: 'null'
+  BaiduAPISecret:
+    type: textarea
+    mode: yaml
+    value: 'null'
+  VolcAPIKey:
+    type: textarea
+    mode: yaml
+    value: 'null'
+  VolcAPISecret:
+    type: textarea
+    mode: yaml
+    value: 'null'
   OpsiRecord:
     value: do_not
     option: [ do_not, save, upload, save_and_upload ]
@@ -180,6 +212,9 @@ OneClickRetire:
   KeepLimitBreak:
     value: keep_limit_break
     option: [ keep_limit_break, do_not_keep ]
+  modify_one_click_retire:
+    value: do_not_modify
+    option: [ do_not_modify, modify ]
 Enhance:
   ShipToEnhance:
     value: all
@@ -219,6 +254,35 @@ StopCondition:
   StageIncrease: false
   GetNewShip: false
   ReachLevel: 0
+RegularInspections:
+  CurrentCampaignTimes: 0
+  CheckInterval: 5
+  IsResearchInspect: false
+  ResearchInspectNotify: false
+  IsFleetInspect: false
+  FleetInspectIndex:
+    value: 0
+    option: [ 0, 1, 2, 3, 4, 5, 6 ]
+  FleetInspectInfo:
+    type: textarea
+    value: undo
+EventPt:
+  EventPtSwitch: false
+  Event2MapName:
+    value: D3
+    type: textarea
+  EventDailyAMapName:
+    value: |-
+      A1>A2>A3
+      B1>B2>B3
+    type: textarea
+  EventDailySpMapName:
+    value: SP
+    type: textarea 
+  EventDailyCD: 
+    value: false
+    type: textarea 
+
 Fleet:
   Fleet1:
     value: 1
@@ -347,6 +411,7 @@ EventDaily:
   StageFilter: |-
     A1 > A2 > A3
   LastStage: 0
+  SyncEmotion: False
 Raid:
   Mode:
     value: hard
@@ -357,9 +422,11 @@ RaidDaily:
     hard > normal > easy
 Hospital:
   UseRecommendFleet: true
+  mapName: 0-T1
 MaritimeEscort:
   Enable: true
 Coalition:
+  UseRecommendFleet: true
   Mode:
     value: hard
     option: [ easy, normal, hard, sp, ex ]
@@ -429,10 +496,17 @@ Research:
     value: always_use
     option: [ always_use, only_05_hour, only_no_project, do_not_use ]
   AllowDelay: true
+  AllowNone: false
+  CheckSeries: 
+    value: change_series_normal
+    option: [ change_series_only, change_series_normal, not_change]
   PresetFilter:
-    value: series_7_blueprint_la9
+    value: series_8_blueprint_305
     option:
       - custom
+      - series_8_blueprint_305
+      - series_8_blueprint_only
+      - series_8_305_only
       - series_7_blueprint_la9
       - series_7_blueprint_only
       - series_7_la9_only
@@ -453,12 +527,12 @@ Research:
       - series_2_blueprint_only
       - series_2_457_only
   CustomFilter: |-
-    S7-DR0.5 > S7-PRY0.5 > S7-Q0.5 > S7-H0.5 > Q0.5 > S7-DR2.5
-    > S7-G1.5 > S7-Q1 > S7-DR5 > 0.5 > S7-G4 > S7-Q2 > S7-PRY2.5 > reset
-    > S7-DR8 > Q1 > 1 > S7-E-315 > S7-G2.5 > G1.5 > 1.5 > S7-E-031
-    > S7-Q4 > Q2 > E2 > 2 > DR2.5 > PRY2.5 > G2.5 > 2.5 > S7-PRY5
-    > S7-PRY8 > Q4 > G4 > 4 > S7-C6 > DR5 > PRY5 > 5 > C6 > 6 > S7-C8
-    > S7-C12 > DR8 > PRY8 > C8 > 8 > C12 > 12
+    S8-DR0.5 > S8-PRY0.5 > S8-Q0.5 > S8-H0.5 > Q0.5 > S8-DR2.5
+    > S8-G1.5 > S8-Q1 > S8-DR5 > 0.5 > S8-G4 > S8-Q2 > S8-PRY2.5 > reset
+    > S8-DR8 > Q1 > 1 > S8-E-315 > S8-G2.5 > G1.5 > 1.5 > S8-E-031
+    > S8-Q4 > Q2 > E2 > 2 > DR2.5 > PRY2.5 > G2.5 > 2.5 > S8-PRY5
+    > S8-PRY8 > Q4 > G4 > 4 > S8-C6 > DR5 > PRY5 > 5 > C6 > 6 > S8-C8
+    > S8-C12 > DR8 > PRY8 > C8 > 8 > C12 > 12
 Dorm:
   Collect: true
   Feed: true
@@ -507,6 +581,8 @@ Awaken:
   LevelCap:
     value: level120
     option: [ level120, level125 ]
+  Favourite:
+    value: false
 GeneralShop:
   UseGems: false
   Refresh: false
@@ -589,6 +665,26 @@ MeritShop:
 CoreShop:
   Filter: |-
     Array
+EventShop:
+  Enable: false
+  UnlockShipSSR: true
+  BuyShipUR:
+    value: 1
+    option: [ 0, 1, 2 ]
+  PresetFilter:
+    value: custom
+    option:
+      - all
+      - custom
+  CustomFilter: |-
+    EquipUR > EquipSSR > GachaTicket
+    > DR > PR > Array > Chip > CatT3
+    > Meta > SkinBox
+    > Oil > Coin > FoodT1
+    > AugmentCore > AugmentEnhanceT2 > AugmentChangeT2 > AugmentChangeT1
+    > Cube > Medal > ExpBookT1
+    > CatT2 > CatT1 > PlateGeneralT3 > PlateT3 > BoxT4
+    > ShipSSR
 ShipyardDr:
   ResearchSeries:
     value: 2
@@ -633,6 +729,21 @@ SupplyPack:
     option: [ 0, 1, 2, 3, 4, 5, 6 ]
 Minigame:
   Collect: false
+Smallevent:
+  SevenDayTask: true
+  UpdateInfoImmediately: false
+  OcrModel:
+    value: volc
+    option: [ baidu, volc ]
+Oilkeep:
+  OilkeepLevel: 8000
+  OilMaxGet: 3000
+PrivateQuarters:
+    BuyRoses: true
+    TargetInteract: true
+    TargetShip:
+      value: anchorage
+      option: [ anchorage, noshiro, sirius, new_jersey ]
 # ==================== Daily ====================
 
 Daily:
@@ -697,6 +808,27 @@ Sos:
   Chapter:
     value: 3
     option: [ 3, 4, 5, 6, 7, 8, 9, 10 ]
+ShipIr:
+  check_filter_show_1: none,none,none,none
+  check_filter_result_1:
+    value: undo > undo
+    type: textarea
+  check_filter_show_2: none,none,none,none
+  check_filter_result_2:
+    value: undo
+    type: textarea
+  check_filter_show_3: none,none,none,none
+  check_filter_result_3:
+    value: undo
+    type: textarea
+  check_filter_show_4: none,none,none,none
+  check_filter_result_4:
+    value: undo
+    type: textarea
+  check_filter_show_5: none,none,none,none
+  check_filter_result_5:
+    value: undo
+    type: textarea
 
 # ==================== Opsi ====================
 
@@ -733,6 +865,7 @@ OpsiExplore:
   ForceRun: false
   LastZone: 0
 OpsiShop:
+  BuySpecialRadar: false
   PresetFilter:
     value: max_benefit_meta
     option:
@@ -771,6 +904,7 @@ OpsiMeowfficerFarming:
     option: [ 3, 4, 5, 6, 10 ]
   TargetZone:
     value: 0
+  IgnoreStory: false
 OpsiHazard1Leveling:
   TargetZone:
     value: 0
@@ -783,11 +917,6 @@ Daemon:
 OpsiDaemon:
   RepairShip: true
   SelectEnemy: true
-EventStory:
-  SkipBattle:
-    type: checkbox
-    value: false
-    option: [ true, false ]
 Benchmark:
   DeviceType:
     value: emulator
@@ -807,3 +936,27 @@ AzurLaneUncensored:
     display: disabled
 GameManager:
   AutoRestart: true
+# ==================== AutoRestart ====================
+AutoRestart:
+  Enabled:
+    type: checkbox
+    value: True
+  AttemptsToRestart:
+    type: input
+    value: 3
+  NotifyWhenAutoRestart:
+    type: checkbox
+    value: false
+InstanceRestart:
+  Enabled:
+    type: checkbox
+    value: false
+  AttemptsToRestart:
+    type: input
+    value: 5
+  NotifyWhenAutoRestart:
+    type: checkbox
+    value: false
+  HasRestarted:
+    value: 0
+    display: hide

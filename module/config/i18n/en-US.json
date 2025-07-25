@@ -66,16 +66,16 @@
       "name": "Event General",
       "help": ""
     },
-    "Coalition": {
-      "name": "Neon City Investigator",
-      "help": ""
-    },
     "Event": {
       "name": "Event",
       "help": ""
     },
     "Event2": {
       "name": "Event-2",
+      "help": ""
+    },
+    "Event3": {
+      "name": "Event-3",
       "help": ""
     },
     "Raid": {
@@ -86,6 +86,10 @@
       "name": "Valley Hospital",
       "help": ""
     },
+    "Coalition": {
+      "name": "Neon City Investigator",
+      "help": ""
+    },
     "MaritimeEscort": {
       "name": "Maritime Escort",
       "help": ""
@@ -93,10 +97,6 @@
     "WarArchives": {
       "name": "War Archives",
       "help": "Due to the lack of maintenance of war archives, continuous clear may not work normally, if Alas runs abnormally, Please manually finish clearing and use auto search"
-    },
-    "CoalitionSp": {
-      "name": "Neon City Investigator SP",
-      "help": ""
     },
     "EventA": {
       "name": "Event Daily A",
@@ -120,6 +120,14 @@
     },
     "RaidDaily": {
       "name": "Raid Daily",
+      "help": ""
+    },
+    "EventStory": {
+      "name": "Task.EventStory.name",
+      "help": "Task.EventStory.help"
+    },
+    "CoalitionSp": {
+      "name": "Neon City Investigator SP",
       "help": ""
     },
     "Commission": {
@@ -148,6 +156,10 @@
     },
     "Reward": {
       "name": "Reward",
+      "help": ""
+    },
+    "Oilkeep": {
+      "name": "Oil balance",
       "help": ""
     },
     "Awaken": {
@@ -189,6 +201,18 @@
     "Minigame": {
       "name": "Minigame",
       "help": "Receive credits and spend them"
+    },
+    "Smallevent": {
+      "name": "Task.Smallevent.name",
+      "help": "Task.Smallevent.help"
+    },
+    "ShipIr": {
+      "name": "Task.ShipIr.name",
+      "help": "Task.ShipIr.help"
+    },
+    "PrivateQuarters": {
+      "name": "Private Quarters",
+      "help": ""
     },
     "OpsiGeneral": {
       "name": "OpSi General",
@@ -256,10 +280,6 @@
     },
     "OpsiDaemon": {
       "name": "OpSi Semi-auto",
-      "help": ""
-    },
-    "EventStory": {
-      "name": "Event Story",
       "help": ""
     },
     "Benchmark": {
@@ -503,6 +523,42 @@
       "help": "GuildCoin.Record.help"
     }
   },
+  "SevenDayStatus": {
+    "_info": {
+      "name": "SevenDayStatus._info.name",
+      "help": "SevenDayStatus._info.help"
+    },
+    "Value": {
+      "name": "SevenDayStatus.Value.name",
+      "help": "SevenDayStatus.Value.help"
+    },
+    "Color": {
+      "name": "SevenDayStatus.Color.name",
+      "help": "SevenDayStatus.Color.help"
+    },
+    "Record": {
+      "name": "SevenDayStatus.Record.name",
+      "help": "SevenDayStatus.Record.help"
+    }
+  },
+  "ResearchPercent": {
+    "_info": {
+      "name": "ResearchPercent._info.name",
+      "help": "ResearchPercent._info.help"
+    },
+    "Value": {
+      "name": "ResearchPercent.Value.name",
+      "help": "ResearchPercent.Value.help"
+    },
+    "Color": {
+      "name": "ResearchPercent.Color.name",
+      "help": "ResearchPercent.Color.help"
+    },
+    "Record": {
+      "name": "ResearchPercent.Record.name",
+      "help": "ResearchPercent.Record.help"
+    }
+  },
   "Scheduler": {
     "_info": {
       "name": "Scheduler",
@@ -553,6 +609,7 @@
       "com.YoStarJP.AzurLane": "JP",
       "com.hkmanjuu.azurlane.gp": "TW",
       "com.bilibili.blhx.huawei": "CN com.bilibili.blhx.huawei",
+      "com.bilibili.blhx.honor": "CN com.bilibili.blhx.honor",
       "com.bilibili.blhx.mi": "CN com.bilibili.blhx.mi",
       "com.tencent.tmgp.bilibili.blhx": "CN com.tencent.tmgp.bilibili.blhx",
       "com.bilibili.blhx.baidu": "CN com.bilibili.blhx.baidu",
@@ -751,6 +808,10 @@
       "stay_there": "Stay There",
       "goto_main": "Goto Main Page",
       "close_game": "Close Game"
+    },
+    "otherLoginTime": {
+      "name": "Remote Login Wait Time",
+      "help": "Waiting time (minutes) when another device login is detected, a comma-separated list of numbers, each login detection will use the next value in sequence. Example: 15,30,60"
     }
   },
   "DropRecord": {
@@ -793,6 +854,35 @@
       "help": "",
       "do_not": "Do nothing",
       "save": "Save"
+    },
+    "NewShipRecord": {
+      "name": "DropRecord.NewShipRecord.name",
+      "help": "DropRecord.NewShipRecord.help",
+      "do_not": "do_not",
+      "save": "save"
+    },
+    "NewShipOcrMethod": {
+      "name": "New Ship OCR Method",
+      "help": "",
+      "LOCAL": "Local",
+      "API_BASIC": "Basic API",
+      "API_ACCURATE": "Accurate API"
+    },
+    "BaiduAPIKey": {
+      "name": "Baidu OCR API Key",
+      "help": ""
+    },
+    "BaiduAPISecret": {
+      "name": "Baidu OCR API Secret",
+      "help": ""
+    },
+    "VolcAPIKey": {
+      "name": "DropRecord.VolcAPIKey.name",
+      "help": "DropRecord.VolcAPIKey.help"
+    },
+    "VolcAPISecret": {
+      "name": "DropRecord.VolcAPISecret.name",
+      "help": "DropRecord.VolcAPISecret.help"
     },
     "OpsiRecord": {
       "name": "OpSi Record",
@@ -840,6 +930,12 @@
       "help": "If you own multiple copies of a ship that has not been fully Limit Broken, this option determines what you want to do with those copies.\nIf one-click retire cannot retire ships, please set to \"Don't Keep\"",
       "keep_limit_break": "Keep Enough to Max LB",
       "do_not_keep": "Don't Keep"
+    },
+    "modify_one_click_retire": {
+      "name": "Try to modify one-click retire settings",
+      "help": "If one-click retire cannot retire ships, it will try to modify its settings",
+      "do_not_modify": "Do not modify",
+      "modify": "Try to modify"
     }
   },
   "Enhance": {
@@ -981,6 +1077,7 @@
       "event_20250227_cn": "Paradiso of Shackled Light",
       "event_20250424_cn": "Toward Tulipa’s Seas",
       "event_20250520_cn": "A Rose on the High Tower",
+      "event_20250724_cn": "The Alchemist and the Tower of Horizons",
       "raid_20200624": "Air Raid Drills with Essex Rerun",
       "raid_20210708": "Cross Wave rerun",
       "raid_20220127": "Mystery Investigation",
@@ -1028,7 +1125,9 @@
       "war_archives_20220224_cn": "archives Abyssal Refrain",
       "war_archives_20220324_cn": "archives Virtual Tower",
       "war_archives_20220414_cn": "archives Aurora Noctis",
-      "war_archives_20220526_cn": "archives Pledge of the Radiant Court"
+      "war_archives_20220428_cn": "archives Rondo at Rainbows End",
+      "war_archives_20220526_cn": "archives Pledge of the Radiant Court",
+      "war_archives_20220728_cn": "archives Aquilifers Ballade"
     },
     "Mode": {
       "name": "Level Mode",
@@ -1090,6 +1189,73 @@
     "ReachLevel": {
       "name": "Level X Reached",
       "help": "Stop current task if any ship under level X has reached level X; saving as 0 implies no limit to the level."
+    }
+  },
+  "RegularInspections": {
+    "_info": {
+      "name": "RegularInspections._info.name",
+      "help": "RegularInspections._info.help"
+    },
+    "CurrentCampaignTimes": {
+      "name": "RegularInspections.CurrentCampaignTimes.name",
+      "help": "RegularInspections.CurrentCampaignTimes.help"
+    },
+    "CheckInterval": {
+      "name": "RegularInspections.CheckInterval.name",
+      "help": "RegularInspections.CheckInterval.help"
+    },
+    "IsResearchInspect": {
+      "name": "RegularInspections.IsResearchInspect.name",
+      "help": "RegularInspections.IsResearchInspect.help"
+    },
+    "ResearchInspectNotify": {
+      "name": "RegularInspections.ResearchInspectNotify.name",
+      "help": "RegularInspections.ResearchInspectNotify.help"
+    },
+    "IsFleetInspect": {
+      "name": "RegularInspections.IsFleetInspect.name",
+      "help": "RegularInspections.IsFleetInspect.help"
+    },
+    "FleetInspectIndex": {
+      "name": "RegularInspections.FleetInspectIndex.name",
+      "help": "RegularInspections.FleetInspectIndex.help",
+      "0": "0",
+      "1": "1",
+      "2": "2",
+      "3": "3",
+      "4": "4",
+      "5": "5",
+      "6": "6"
+    },
+    "FleetInspectInfo": {
+      "name": "RegularInspections.FleetInspectInfo.name",
+      "help": "RegularInspections.FleetInspectInfo.help"
+    }
+  },
+  "EventPt": {
+    "_info": {
+      "name": "EventPt._info.name",
+      "help": "EventPt._info.help"
+    },
+    "EventPtSwitch": {
+      "name": "EventPt.EventPtSwitch.name",
+      "help": "EventPt.EventPtSwitch.help"
+    },
+    "Event2MapName": {
+      "name": "EventPt.Event2MapName.name",
+      "help": "EventPt.Event2MapName.help"
+    },
+    "EventDailyAMapName": {
+      "name": "EventPt.EventDailyAMapName.name",
+      "help": "EventPt.EventDailyAMapName.help"
+    },
+    "EventDailySpMapName": {
+      "name": "EventPt.EventDailySpMapName.name",
+      "help": "EventPt.EventDailySpMapName.help"
+    },
+    "EventDailyCD": {
+      "name": "EventPt.EventDailyCD.name",
+      "help": "EventPt.EventDailyCD.help"
     }
   },
   "Fleet": {
@@ -1477,6 +1643,10 @@
     "LastStage": {
       "name": "Last Event Daily Stage",
       "help": "Automatically updated, skips completed levels in the filter, and resets at server reset time (00:00)"
+    },
+    "SyncEmotion": {
+      "name": "EventDaily.SyncEmotion.name",
+      "help": "EventDaily.SyncEmotion.help"
     }
   },
   "Raid": {
@@ -1515,6 +1685,10 @@
     "UseRecommendFleet": {
       "name": "Use Fleet Recommendation",
       "help": "If turned off, you need to manually prepare fleets of all 15 stages in advance"
+    },
+    "mapName": {
+      "name": "Hospital.mapName.name",
+      "help": "Hospital.mapName.help"
     }
   },
   "MaritimeEscort": {
@@ -1531,6 +1705,10 @@
     "_info": {
       "name": "Event Settings",
       "help": "Fleets must be prepared manually in game before running"
+    },
+    "UseRecommendFleet": {
+      "name": "Coalition.UseRecommendFleet.name",
+      "help": "Coalition.UseRecommendFleet.help"
     },
     "Mode": {
       "name": "Mode",
@@ -1664,10 +1842,24 @@
       "name": "Delay research when resources are insufficient",
       "help": "When the resources are insufficient, Alas will delay research until the conditions are met or research queue is about to be emptied, which will not cause the research to stop\nIf the resources are insufficient for a long time or the time of running alas is not long enough, you can cancel this option to keep the research queue full"
     },
+    "AllowNone": {
+      "name": "Empty selection is allowed, that is, only eligible projects are selected for scientific research",
+      "help": "By default, Alas will force the selection when no conditions are met"
+    },
+    "CheckSeries": {
+      "name": "Check Research Series",
+      "help": "Check the current selected research series and switch to the corresponding strategy",
+      "change_series_only": "Change Series Only (Keep Original Type)",
+      "change_series_normal": "Change Series (Blueprint+Equipment)",
+      "not_change": "Not Change Series"
+    },
     "PresetFilter": {
       "name": "Preset Filter Select",
       "help": "See research drops rates and spawn rates in https://azur-stats.lyoko.io/. People without a basic knowledge of these are recommended to use pre-optimized presets instead of writing custom filters",
       "custom": "custom",
+      "series_8_blueprint_305": "Series 8 Blueprints+305",
+      "series_8_blueprint_only": "Series 8 Blueprints Only",
+      "series_8_305_only": "Series 8 305 Only",
       "series_7_blueprint_la9": "Series 7 Blueprints+La9",
       "series_7_blueprint_only": "Series 7 Blueprints Only",
       "series_7_la9_only": "Series 7 La9 Only",
@@ -1861,6 +2053,10 @@
       "help": "",
       "level120": "Lv.120",
       "level125": "Lv.125"
+    },
+    "Favourite": {
+      "name": "Awaken Favourite Ships Only",
+      "help": ""
     }
   },
   "GeneralShop": {
@@ -2087,6 +2283,37 @@
       "help": "All options have been defined at <https://github.com/LmeSzinc/AzurLaneAutoScript/wiki/reward_shop_filter_string>\nHowever unlike other shops, only Chip and Array are supported\nALAS does not browse, scroll, or recognize any other items displayed besides those two"
     }
   },
+  "EventShop": {
+    "_info": {
+      "name": "Event Shop",
+      "help": "Ships will be bought after event ends, and corresponding pts will be preserved."
+    },
+    "Enable": {
+      "name": "Enable Event Shop",
+      "help": ""
+    },
+    "UnlockShipSSR": {
+      "name": "Unlock event SSR ship",
+      "help": "If not enabled, will discard `ShipSSR` and `Meta` in filter string."
+    },
+    "BuyShipUR": {
+      "name": "Buy X event UR ship",
+      "help": "",
+      "0": "0",
+      "1": "1",
+      "2": "2"
+    },
+    "PresetFilter": {
+      "name": "Preset Filter Select",
+      "help": "",
+      "all": "all",
+      "custom": "custom"
+    },
+    "CustomFilter": {
+      "name": "Custom Filter",
+      "help": "To use your own filter, set \"Preset Filter Select\" to \"custom\". All options have been defined at  <https://github.com/LmeSzinc/AzurLaneAutoScript/wiki/reward_shop_filter_string>"
+    }
+  },
   "ShipyardDr": {
     "_info": {
       "name": "DR Blueprints Purchase Settings",
@@ -2265,6 +2492,62 @@
     "Collect": {
       "name": "Enable",
       "help": ""
+    }
+  },
+  "Smallevent": {
+    "_info": {
+      "name": "Smallevent._info.name",
+      "help": "Smallevent._info.help"
+    },
+    "SevenDayTask": {
+      "name": "Smallevent.SevenDayTask.name",
+      "help": "Smallevent.SevenDayTask.help"
+    },
+    "UpdateInfoImmediately": {
+      "name": "Smallevent.UpdateInfoImmediately.name",
+      "help": "Smallevent.UpdateInfoImmediately.help"
+    },
+    "OcrModel": {
+      "name": "Smallevent.OcrModel.name",
+      "help": "Smallevent.OcrModel.help",
+      "baidu": "baidu",
+      "volc": "volc"
+    }
+  },
+  "Oilkeep": {
+    "_info": {
+      "name": "Oil Balance",
+      "help": "Pick up oil from the storage room 4 times a day to stabilize the amount of oil"
+    },
+    "OilkeepLevel": {
+      "name": "Oil Balance Value",
+      "help": "The default value is 8000, that is, when the amount of oil is less than 7900, you will receive oil to 7900"
+    },
+    "OilMaxGet": {
+      "name": "Oilkeep.OilMaxGet.name",
+      "help": "Oilkeep.OilMaxGet.help"
+    }
+  },
+  "PrivateQuarters": {
+    "_info": {
+      "name": "Private Quarters Settings",
+      "help": "Execute the automated task relating to the private quarters feature\nToggle desired subtasks, can enable just 1 or both"
+    },
+    "BuyRoses": {
+      "name": "Buy Weekly Roses",
+      "help": "On week reset, roses will be available for purchase\nThe purchase is made in bulk wholsesale or none at all\nMinimum of 24K coin is required, if not enough subtask will be delayed to the next day and try again then"
+    },
+    "TargetInteract": {
+      "name": "Enable Daily Interact",
+      "help": "Enables execution of the interation sequence with target ship girl"
+    },
+    "TargetShip": {
+      "name": "Choose Ship Girl",
+      "help": "Select the target ship girl for interaction sequence",
+      "anchorage": "Anchorage",
+      "noshiro": "Noshiro",
+      "sirius": "Sirius",
+      "new_jersey": "New Jersey"
     }
   },
   "Daily": {
@@ -2471,6 +2754,52 @@
       "10": "10"
     }
   },
+  "ShipIr": {
+    "_info": {
+      "name": "ShipIr._info.name",
+      "help": "ShipIr._info.help"
+    },
+    "check_filter_show_1": {
+      "name": "ShipIr.check_filter_show_1.name",
+      "help": "ShipIr.check_filter_show_1.help"
+    },
+    "check_filter_result_1": {
+      "name": "ShipIr.check_filter_result_1.name",
+      "help": "ShipIr.check_filter_result_1.help"
+    },
+    "check_filter_show_2": {
+      "name": "ShipIr.check_filter_show_2.name",
+      "help": "ShipIr.check_filter_show_2.help"
+    },
+    "check_filter_result_2": {
+      "name": "ShipIr.check_filter_result_2.name",
+      "help": "ShipIr.check_filter_result_2.help"
+    },
+    "check_filter_show_3": {
+      "name": "ShipIr.check_filter_show_3.name",
+      "help": "ShipIr.check_filter_show_3.help"
+    },
+    "check_filter_result_3": {
+      "name": "ShipIr.check_filter_result_3.name",
+      "help": "ShipIr.check_filter_result_3.help"
+    },
+    "check_filter_show_4": {
+      "name": "ShipIr.check_filter_show_4.name",
+      "help": "ShipIr.check_filter_show_4.help"
+    },
+    "check_filter_result_4": {
+      "name": "ShipIr.check_filter_result_4.name",
+      "help": "ShipIr.check_filter_result_4.help"
+    },
+    "check_filter_show_5": {
+      "name": "ShipIr.check_filter_show_5.name",
+      "help": "ShipIr.check_filter_show_5.help"
+    },
+    "check_filter_result_5": {
+      "name": "ShipIr.check_filter_result_5.name",
+      "help": "ShipIr.check_filter_result_5.help"
+    }
+  },
   "OpsiAshAssist": {
     "_info": {
       "name": "META Assist Settings",
@@ -2596,6 +2925,10 @@
       "name": "OpSi Shop Settings",
       "help": "Completes OpSi daily activities\nThe following must be satisfied:\n- OpSi story and practice battles must be complete\n- Task OpSi Explore enabled or consuming 5000 oil for special radar in OpSi voucher shop\nAvailable only in the next month after clearing OpSi story, i.e., after the port shop becomes a new version of the shop"
     },
+    "BuySpecialRadar": {
+      "name": "Buy Special Radar",
+      "help": "Automatically purchase the Operation Siren Data Logger (5k oil item)"
+    },
     "PresetFilter": {
       "name": "OpSi Shop Filter",
       "help": "Generally does not need to be modified. Use \"High value items and META material\"` if Voucher Coins spilled or \"Without META materials\" if you are newcomer.\nHigh value items include ActionPoint, Logger and T4 or higher items; META materials include METABook and META enhance materials.",
@@ -2705,6 +3038,10 @@
     "TargetZone": {
       "name": "Target Zone ID",
       "help": "Supports either Zone ID or Name in CN/EN/JP/TW, i.e. \"51\", \"NA Ocean SE Sector E\"\nIf specified, Alas will loop on this same zone after each clear\nUse default value 0 or clear the field to remove the specification\nZone information can be acquired from <./module/os/map_data.py>"
+    },
+    "IgnoreStory": {
+      "name": "OpsiMeowfficerFarming.IgnoreStory.name",
+      "help": "OpsiMeowfficerFarming.IgnoreStory.help"
     }
   },
   "OpsiHazard1Leveling": {
@@ -2742,18 +3079,6 @@
     "SelectEnemy": {
       "name": "Clear nearby enemies and resources",
       "help": "Clean nearby enemies and resources, and find new enemies or materials after cleaning, which usually clears the entire map. If some of them haven't been cleared, you need to solve them manually"
-    }
-  },
-  "EventStory": {
-    "_info": {
-      "name": "Event Story",
-      "help": "Complete the event story, only applicable to events aired on or after 20241219, please wait for about 3 minutes"
-    },
-    "SkipBattle": {
-      "name": "Kill game to skip battles",
-      "help": "",
-      "True": "Enabled",
-      "False": "False"
     }
   },
   "Benchmark": {
@@ -2796,6 +3121,46 @@
     "AutoRestart": {
       "name": "Automatic Login",
       "help": "Log back into the game when the game has been ended."
+    }
+  },
+  "AutoRestart": {
+    "_info": {
+      "name": "AutoRestart._info.name",
+      "help": "AutoRestart._info.help"
+    },
+    "Enabled": {
+      "name": "AutoRestart.Enabled.name",
+      "help": "AutoRestart.Enabled.help"
+    },
+    "AttemptsToRestart": {
+      "name": "AutoRestart.AttemptsToRestart.name",
+      "help": "AutoRestart.AttemptsToRestart.help"
+    },
+    "NotifyWhenAutoRestart": {
+      "name": "AutoRestart.NotifyWhenAutoRestart.name",
+      "help": "AutoRestart.NotifyWhenAutoRestart.help"
+    }
+  },
+  "InstanceRestart": {
+    "_info": {
+      "name": "InstanceRestart._info.name",
+      "help": "InstanceRestart._info.help"
+    },
+    "Enabled": {
+      "name": "InstanceRestart.Enabled.name",
+      "help": "InstanceRestart.Enabled.help"
+    },
+    "AttemptsToRestart": {
+      "name": "InstanceRestart.AttemptsToRestart.name",
+      "help": "InstanceRestart.AttemptsToRestart.help"
+    },
+    "NotifyWhenAutoRestart": {
+      "name": "InstanceRestart.NotifyWhenAutoRestart.name",
+      "help": "InstanceRestart.NotifyWhenAutoRestart.help"
+    },
+    "HasRestarted": {
+      "name": "InstanceRestart.HasRestarted.name",
+      "help": "InstanceRestart.HasRestarted.help"
     }
   },
   "Storage": {
@@ -2876,6 +3241,8 @@
       "Medal": "Medal",
       "Core": "Core Data",
       "GuildCoin": "Guild Coin",
+      "SevenDayStatus": "Gui.Overview.SevenDayStatus",
+      "ResearchPercent": "Gui.Overview.ResearchPercent",
       "Log": "Log",
       "Running": "Running",
       "Pending": "Pending",
