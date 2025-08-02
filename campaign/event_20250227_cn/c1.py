@@ -61,6 +61,9 @@ class Config:
     MAP_HAS_MODE_SWITCH = True
     STAGE_ENTRANCE = ['half', '20240725']
     STAGE_INCREASE_AB = True
+    STAGE_INCREASE_CUSTOM = [
+        'A1 > A2 > A3 > B1 > B2 > B3 > C1 > C2 > C3 > D1 > D2 > D3',
+    ]
     MAP_SIREN_HAS_BOSS_ICON_SMALL = True
     INTERNAL_LINES_FIND_PEAKS_PARAMETERS = {
         'height': (80, 255 - 33),

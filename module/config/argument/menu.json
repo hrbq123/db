@@ -25,6 +25,7 @@
       "EventGeneral",
       "Event",
       "Event2",
+      "Event3",
       "Raid",
       "Hospital",
       "Coalition",
@@ -42,6 +43,7 @@
       "EventD",
       "EventSp",
       "RaidDaily",
+      "EventStory",
       "CoalitionSp"
     ]
   },
@@ -102,7 +104,6 @@
     "tasks": [
       "Daemon",
       "OpsiDaemon",
-      "EventStory",
       "Benchmark",
       "AzurLaneUncensored",
       "GameManager"

@@ -20,12 +20,15 @@ Restart:
 Main:
   Campaign:
     Event: campaign_main
+
 Main2:
   Campaign:
     Event: campaign_main
+
 Main3:
   Campaign:
     Event: campaign_main
+
 GemsFarming:
   Campaign:
     Event:
@@ -41,6 +44,7 @@ GemsFarming:
     StageIncrease: false
     GetNewShip: false
     ReachLevel: 0
+
   Fleet:
     FleetOrder:
       display: display
@@ -53,10 +57,36 @@ Event:
   Campaign:
     Mode: normal
     AmbushEvade: true
+  EventPt:
+    Event2MapName: 
+      value: HT6
+      type: state
+      display: display
+    EventDailyAMapName:
+      value: T1>T2>T3>T4>T5>T6
+      type: state
+      display: display
+    EventDailySpMapName:
+      value: sp
+      type: state
+      display: display
+    EventDailyCD:
+      value: HT1>HT2>HT3>HT4>HT5>HT6
+      type: state
+      display: display
+
 Event2:
   Campaign:
     Mode: normal
     AmbushEvade: true
+
+Event3:
+  Campaign:
+    Mode: normal
+    Event:
+      type: state
+    AmbushEvade: true
+
 EventA:
   Scheduler:
     SuccessInterval: 30
@@ -73,6 +103,7 @@ EventA:
     StageIncrease: false
     GetNewShip: false
     ReachLevel: 0
+
 EventB:
   Scheduler:
     SuccessInterval: 30
@@ -89,6 +120,7 @@ EventB:
     StageIncrease: false
     GetNewShip: false
     ReachLevel: 0
+
 EventC:
   Scheduler:
     SuccessInterval: 30
@@ -105,6 +137,7 @@ EventC:
     StageIncrease: false
     GetNewShip: false
     ReachLevel: 0
+
 EventD:
   Scheduler:
     SuccessInterval: 30
@@ -121,6 +154,7 @@ EventD:
     StageIncrease: false
     GetNewShip: false
     ReachLevel: 0
+
 EventSp:
   Scheduler:
     SuccessInterval: 30
@@ -137,6 +171,7 @@ EventSp:
     StageIncrease: false
     GetNewShip: false
     ReachLevel: 0
+
   Submarine:
     AutoSearchMode: sub_standby
 Raid:
@@ -153,6 +188,7 @@ Raid:
     StageIncrease: false
     GetNewShip: false
     ReachLevel: 0
+
   Emotion:
     Fleet2Value: 119
     Fleet2Record: 2020-01-01 00:00:00
@@ -166,6 +202,7 @@ Hospital:
     StageIncrease: false
     GetNewShip: false
     ReachLevel: 0
+
   Emotion:
     Fleet1Control: prevent_yellow_face
     Fleet1Recover: not_in_dormitory
@@ -194,6 +231,7 @@ RaidDaily:
     StageIncrease: false
     GetNewShip: false
     ReachLevel: 0
+
   Emotion:
     Fleet2Value: 119
     Fleet2Record: 2020-01-01 00:00:00
@@ -223,9 +261,17 @@ Coalition:
       option: [ easy, normal, hard, ex ]
   StopCondition:
     MapAchievement: non_stop
-    StageIncrease: false
     GetNewShip: false
     ReachLevel: 0
+  EventPt:
+    Event2MapName: 
+      value: HT6
+    EventDailyAMapName:
+      value: T1>T2>T3>T4>T5>T6
+    EventDailySpMapName:
+      value: sp
+    EventDailyCD:
+      value: HT1>HT2>HT3>HT4>HT5>HT6
   Emotion:
     Fleet2Value: 119
     Fleet2Record: 2020-01-01 00:00:00
@@ -248,11 +294,15 @@ CoalitionSp:
   Coalition:
     # CoalitionSp hard-codes Mode='sp'
     Mode: sp
+    Fleet:
+      value: multi
+      type: state
   StopCondition:
     MapAchievement: non_stop
     StageIncrease: false
     GetNewShip: false
     ReachLevel: 0
+
   Emotion:
     Fleet2Value: 119
     Fleet2Record: 2020-01-01 00:00:00
@@ -312,6 +362,11 @@ Reward:
     SuccessInterval: 120-240
     FailureInterval: 120-240
     ServerUpdate: 00:00
+Oilkeep:
+  Scheduler:
+    SuccessInterval: 30
+    FailureInterval: 30
+    ServerUpdate: 00:00, 06:00, 12:00, 18:00
 ShopFrequent:
   Scheduler:
     SuccessInterval: 30
@@ -368,6 +423,11 @@ WarArchives:
   Campaign:
     Mode: normal
     AmbushEvade: true
+ShipIr:
+  Scheduler:
+    SuccessInterval: 30
+    FailureInterval: 30
+    ServerUpdate: 00:00
 
 # ==================== Opsi ====================
 
@@ -433,13 +493,3 @@ OpsiHazard1Leveling:
     ServerUpdate: 00:00, 12:00
   OpsiFleet:
     Submarine: false
-
-# ==================== Tool ====================
-
-EventStory:
-  EventStory:
-    SkipBattle:
-      type: lock
-      value: true
-      option: [ true, ]
-      option_bold: [ true, ]

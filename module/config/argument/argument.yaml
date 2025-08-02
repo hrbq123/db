@@ -2,6 +2,66 @@
 # Define arguments.
 # --------------------
 
+# ==================== Dashboard ====================
+Oil:
+  Value: 0
+  Limit: 0
+  Color: ^000000
+  Record: 2020-01-01 00:00:00
+Coin:
+  Value: 0
+  Limit: 0
+  Color: ^FFAA33
+  Record: 2020-01-01 00:00:00
+Gem:
+  Value: 0
+  Color: ^FF3333
+  Record: 2020-01-01 00:00:00
+Pt:
+  Value: 0
+  Color: ^00BFFF
+  Record: 2020-01-01 00:00:00
+YellowCoin:
+  Value: 0
+  Color: ^FF8800
+  Record: 2020-01-01 00:00:00
+PurpleCoin:
+  Value: 0
+  Color: ^7700BB
+  Record: 2020-01-01 00:00:00
+ActionPoint:
+  Value: 0
+  Total: 0
+  Color: ^0000FF
+  Record: 2020-01-01 00:00:00
+Merit:
+  Value: 0
+  Color: ^FFFF00
+  Record: 2020-01-01 00:00:00
+Cube:
+  Value: 0
+  Color: ^33FFFF
+  Record: 2020-01-01 00:00:00
+Core:
+  Value: 0
+  Color: ^AAAAAA
+  Record: 2020-01-01 00:00:00
+Medal:
+  Value: 0
+  Color: ^FFDD00
+  Record: 2020-01-01 00:00:00
+GuildCoin:
+  Value: 0
+  Color: ^AAAAAA
+  Record: 2020-01-01 00:00:00
+SevenDayStatus:
+  Value: 0
+  Color: ^AFAAAA
+  Record: 2020-01-01 00:00:00
+ResearchPercent:
+  Value: 0
+  Color: ^0000FF
+  Record: 2020-01-01 00:00:00
 # ==================== Alas ====================
 
 Scheduler:
@@ -95,6 +155,9 @@ Optimization:
   WhenTaskQueueEmpty:
     value: goto_main
     option: [ stay_there, goto_main, close_game ]
+  otherLoginTime:
+    value: 15,30,60
+    type: textarea
 DropRecord:
   SaveFolder: ./screenshots
   AzurStatsID: null
@@ -110,6 +173,28 @@ DropRecord:
   CombatRecord:
     value: do_not
     option: [ do_not, save ]
+  NewShipRecord:
+    value: do_not
+    option: [ do_not, save ]
+  NewShipOcrMethod:
+    value: LOCAL
+    option: [ LOCAL, API_BASIC, API_ACCURATE ]
+  BaiduAPIKey:
+    type: textarea
+    mode: yaml
+    value: 'null'
+  BaiduAPISecret:
+    type: textarea
+    mode: yaml
+    value: 'null'
+  VolcAPIKey:
+    type: textarea
+    mode: yaml
+    value: 'null'
+  VolcAPISecret:
+    type: textarea
+    mode: yaml
+    value: 'null'
   OpsiRecord:
     value: do_not
     option: [ do_not, save, upload, save_and_upload ]
@@ -127,6 +212,9 @@ OneClickRetire:
   KeepLimitBreak:
     value: keep_limit_break
     option: [ keep_limit_break, do_not_keep ]
+  modify_one_click_retire:
+    value: do_not_modify
+    option: [ do_not_modify, modify ]
 Enhance:
   ShipToEnhance:
     value: all
@@ -166,6 +254,35 @@ StopCondition:
   StageIncrease: false
   GetNewShip: false
   ReachLevel: 0
+RegularInspections:
+  CurrentCampaignTimes: 0
+  CheckInterval: 5
+  IsResearchInspect: false
+  ResearchInspectNotify: false
+  IsFleetInspect: false
+  FleetInspectIndex:
+    value: 0
+    option: [ 0, 1, 2, 3, 4, 5, 6 ]
+  FleetInspectInfo:
+    type: textarea
+    value: undo
+EventPt:
+  EventPtSwitch: false
+  Event2MapName:
+    value: D3
+    type: textarea
+  EventDailyAMapName:
+    value: |-
+      A1>A2>A3
+      B1>B2>B3
+    type: textarea
+  EventDailySpMapName:
+    value: SP
+    type: textarea 
+  EventDailyCD: 
+    value: false
+    type: textarea 
+
 Fleet:
   Fleet1:
     value: 1
@@ -294,6 +411,7 @@ EventDaily:
   StageFilter: |-
     A1 > A2 > A3
   LastStage: 0
+  SyncEmotion: False
 Raid:
   Mode:
     value: hard
@@ -304,9 +422,11 @@ RaidDaily:
     hard > normal > easy
 Hospital:
   UseRecommendFleet: true
+  mapName: 0-T1
 MaritimeEscort:
   Enable: true
 Coalition:
+  UseRecommendFleet: true
   Mode:
     value: hard
     option: [ easy, normal, hard, sp, ex ]
@@ -376,6 +496,10 @@ Research:
     value: always_use
     option: [ always_use, only_05_hour, only_no_project, do_not_use ]
   AllowDelay: true
+  AllowNone: false
+  CheckSeries: 
+    value: change_series_normal
+    option: [ change_series_only, change_series_normal, not_change]
   PresetFilter:
     value: series_8_blueprint_305
     option:
@@ -541,6 +665,26 @@ MeritShop:
 CoreShop:
   Filter: |-
     Array
+EventShop:
+  Enable: false
+  UnlockShipSSR: true
+  BuyShipUR:
+    value: 1
+    option: [ 0, 1, 2 ]
+  PresetFilter:
+    value: custom
+    option:
+      - all
+      - custom
+  CustomFilter: |-
+    EquipUR > EquipSSR > GachaTicket
+    > DR > PR > Array > Chip > CatT3
+    > Meta > SkinBox
+    > Oil > Coin > FoodT1
+    > AugmentCore > AugmentEnhanceT2 > AugmentChangeT2 > AugmentChangeT1
+    > Cube > Medal > ExpBookT1
+    > CatT2 > CatT1 > PlateGeneralT3 > PlateT3 > BoxT4
+    > ShipSSR
 ShipyardDr:
   ResearchSeries:
     value: 2
@@ -585,6 +729,15 @@ SupplyPack:
     option: [ 0, 1, 2, 3, 4, 5, 6 ]
 Minigame:
   Collect: false
+Smallevent:
+  SevenDayTask: true
+  UpdateInfoImmediately: false
+  OcrModel:
+    value: volc
+    option: [ baidu, volc ]
+Oilkeep:
+  OilkeepLevel: 8000
+  OilMaxGet: 3000
 PrivateQuarters:
     BuyRoses: true
     BuyCake: false
@@ -656,6 +809,27 @@ Sos:
   Chapter:
     value: 3
     option: [ 3, 4, 5, 6, 7, 8, 9, 10 ]
+ShipIr:
+  check_filter_show_1: none,none,none,none
+  check_filter_result_1:
+    value: undo > undo
+    type: textarea
+  check_filter_show_2: none,none,none,none
+  check_filter_result_2:
+    value: undo
+    type: textarea
+  check_filter_show_3: none,none,none,none
+  check_filter_result_3:
+    value: undo
+    type: textarea
+  check_filter_show_4: none,none,none,none
+  check_filter_result_4:
+    value: undo
+    type: textarea
+  check_filter_show_5: none,none,none,none
+  check_filter_result_5:
+    value: undo
+    type: textarea
 
 # ==================== Opsi ====================
 
@@ -692,6 +866,7 @@ OpsiExplore:
   ForceRun: false
   LastZone: 0
 OpsiShop:
+  BuySpecialRadar: false
   PresetFilter:
     value: max_benefit_meta
     option:
@@ -730,6 +905,7 @@ OpsiMeowfficerFarming:
     option: [ 3, 4, 5, 6, 10 ]
   TargetZone:
     value: 0
+  IgnoreStory: false
 OpsiHazard1Leveling:
   TargetZone:
     value: 0
@@ -742,11 +918,6 @@ Daemon:
 OpsiDaemon:
   RepairShip: true
   SelectEnemy: true
-EventStory:
-  SkipBattle:
-    type: checkbox
-    value: false
-    option: [ true, false ]
 Benchmark:
   DeviceType:
     value: emulator
@@ -766,3 +937,8 @@ AzurLaneUncensored:
     display: disabled
 GameManager:
   AutoRestart: true
+# ==================== AutoRestart ====================
+AutoRestart:
+  Enabled:
+    type: checkbox
+    value: True
