@@ -6,7 +6,7 @@ from module.eventstory.assets import *
 from module.handler.login import LoginHandler
 from module.logger import logger
 from module.ui.page import page_event
-
+from datetime import datetime
 
 class EventStory(CampaignUI, Combat, LoginHandler):
     def ui_goto_event_story(self):
@@ -177,13 +177,13 @@ class EventStory(CampaignUI, Combat, LoginHandler):
         return 'unknown'
 
     def run(self):
-        if not self.device.app_is_running():
-            logger.warning('Game is not running, start it')
-            self.app_start()
-
-        self.run_event_story()
-
+        now = datetime.now()
+        if datetime.now() < datetime(2025, 8, 7, 12, 0, 0):#eventSet
+            self.run_event_story()
+        else:
+            logger.info('Event story expired')
         # Scheduler
+        self.config.task_delay(server_update=True)
         pass
 
 

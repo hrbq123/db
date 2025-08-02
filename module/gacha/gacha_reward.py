@@ -5,10 +5,14 @@ from module.gacha.assets import *
 from module.gacha.ui import GachaUI
 from module.handler.assets import POPUP_CONFIRM, STORY_SKIP
 from module.logger import logger
-from module.ocr.ocr import Digit
+from module.ocr.ocr import Digit, Ocr
 from module.retire.retirement import Retirement
 from module.shop.shop_general import GeneralShop
-
+from module.log_res.log_res import LogRes
+from module.base.utils import crop, extract_letters
+import numpy
+from module.ocr.api_ocr import BaiduOcr
+from datetime import datetime
 RECORD_GACHA_OPTION = ('RewardRecord', 'gacha')
 RECORD_GACHA_SINCE = (0,)
 OCR_BUILD_CUBE_COUNT = Digit(BUILD_CUBE_COUNT, letter=(255, 247, 247), threshold=64)
@@ -124,6 +128,8 @@ class RewardGacha(GachaUI, GeneralShop, Retirement):
         logger.info(f'Able to submit up to {target_count} build orders')
         self._currency -= gold_total
         self.build_cube_count -= cube_total
+        LogRes(self.config).Cube = self.build_cube_count
+        self.config.update()
         return target_count
 
     def gacha_goto_pool(self, target_pool):
@@ -229,11 +235,16 @@ class RewardGacha(GachaUI, GeneralShop, Retirement):
                     confirm_mode = False
                 confirm_timer.reset()
                 continue
-
-            if self.appear(GET_SHIP, interval=1):
-                self.device.click(STORY_SKIP)  # Fast forward for multiple orders
-                confirm_timer.reset()
-                continue
+            if self.config.DropRecord_NewShipRecord != "save":
+                if self.appear(GET_SHIP, interval=1):
+                    self.device.click(STORY_SKIP)  # Fast forward for multiple orders
+                    confirm_timer.reset()
+                    continue
+            else:   
+                if self.handle_get_ship(ocr_type=self.config.DropRecord_NewShipOcrMethod):
+                    # self.device.click(STORY_SKIP)
+                    confirm_timer.reset()
+                    continue
 
             if self.appear(BUILD_FINISH_RESULTS, offset=(20, 150), interval=3):
                 self.device.click(BUILD_FINISH_ORDERS)  # Safe area
@@ -321,6 +332,9 @@ class RewardGacha(GachaUI, GeneralShop, Retirement):
             buy[0] = self.build_ticket_count
             # Calculate rolls allowed based on configurations and resources
             buy[1] = self.gacha_calculate(self.config.Gacha_Amount-self.build_ticket_count, gold_cost, cube_cost)
+        else:
+            LogRes(self.config).Cube = self.build_cube_count
+            self.config.update()
 
         # Submit 'buy_count' and execute if capable
         # Cannot use handle_popup_confirm, this window
@@ -348,3 +362,126 @@ class RewardGacha(GachaUI, GeneralShop, Retirement):
         """
         self.gacha_run()
         self.config.task_delay(server_update=True)
+
+    
+    def recognize_ship_name(self, image, area, OCR_API, model="general_basic"):
+        """
+        Use Baidu OCR API to recognize ship name
+        
+        Args:
+            image: Original image
+            area: Crop area (x1, y1, x2, y2)
+            model: Recognition model, can be "general_basic" or "accurate_basic"
+        Returns:
+            str: Recognized ship name, returns "Unknown" if recognition fails
+        """
+
+        # from PIL import Image
+        
+        # Show original crop area
+        original_crop = crop(image, area)
+        # Image.fromarray(original_crop).show(title="Original Crop")
+        
+        # Show preprocessed image
+        image = extract_letters(original_crop, letter=(247, 251, 247), threshold=128)
+        image = image.astype(numpy.uint8)
+        # Image.fromarray(image).show(title="Preprocessed Image")
+        
+        result = OCR_API.request_baidu_ocr(image,area,model)
+        if result:
+            if 'words_result' in result and len(result['words_result']) > 0:
+                ship_name = result['words_result'][0]['words']
+                return ship_name
+            else:
+                logger.info(result)
+                logger.warning('Failed to recognize ship name')
+                return "Unknown"
+        else:
+            logger.warning('Failed to call Baidu OCR API')
+            return "Unknown"
+
+    def handle_get_ship(self, drop=None, skip_first_screenshot=True,ocr_type="LOCAL"):
+        """
+        Args:
+            drop (DropImage):
+        Returns:
+            bool:
+        """
+        if not self.appear(GET_SHIP, interval=5):
+            return False
+
+        if 'save' in self.config.DropRecord_NewShipRecord:
+            confirm_timer = Timer(3)
+        else:
+            confirm_timer = Timer(1)
+        confirm_timer.start()
+        OCR_API = BaiduOcr(self.config)
+        while 1:
+            if skip_first_screenshot:
+                skip_first_screenshot = False
+            else:
+                self.device.screenshot()
+
+            # End
+            if confirm_timer.reached():
+                break
+            from module.combat.assets import NEW_SHIP
+            if self.appear(NEW_SHIP):
+                logger.info('Get a new SHIP')
+                # Use OCR to recognize ship name
+                ship_name_area = (360, 552, 550, 582)  # Ship name area
+                if ocr_type == "LOCAL":
+                    ship_name = Ocr(ship_name_area, lang="cnocr", letter=(247, 251, 247), threshold=128).ocr(self.device.image)#ocr_LOCAL
+                elif ocr_type == "API_BASIC":
+                    ship_name = self.recognize_ship_name(self.device.image, ship_name_area,OCR_API,model="general_basic")#ocr_API_basic
+                elif ocr_type == "API_ACCURATE":
+                    ship_name = self.recognize_ship_name(self.device.image, ship_name_area,OCR_API,model="accurate_basic")#ocr_API_accurate
+                logger.info(f'New ship name: {ship_name}')
+
+                current_date = datetime.now()
+                date_prefix = f"{current_date.month}_{current_date.day}_"
+                ship_name_with_date = date_prefix + ship_name
+                
+                if drop:
+                    drop.handle_add(self)
+                with self.stat.new(
+                    genre=self.config.config_name,
+                    method=self.config.DropRecord_NewShipRecord,
+                    info=ship_name_with_date
+                ) as drop2:
+                    drop2.handle_add(self, before=1.0)
+                self.config.GET_SHIP_TRIGGERED = True
+                break
+        self.device.click(GET_SHIP)
+        return True
+
+if __name__ == "__main__":
+    from module.base.utils import load_image
+    import os
+    self = RewardGacha('alas', task='RewardGacha')
+    folder_path = r"C:\Users\W1NDe\Documents\GitHub\M-AzurLaneAutoScript\screenshots\zTTT"
+    ship_name_area = (360, 552, 550, 582)  # Ship name area
+    ocr_api = BaiduOcr(self.config,api_key="",secret_key="")
+    # Traverse all images in the folder
+    for filename in os.listdir(folder_path):
+        if filename.endswith(('.png', '.jpg', '.jpeg')):
+            image_path = os.path.join(folder_path, filename)
+            logger.info(f'Processing image: {filename}')
+            
+            try:
+                image = load_image(image_path)
+                # Use local OCR recognition
+                # ship_name = Ocr(ship_name_area, lang="cnocr", letter=(247, 251, 247), threshold=128).ocr(image)
+                # logger.info(f'Local OCR result: {ship_name}')
+                
+                # Use Baidu OCR API recognition
+                api_result = self.recognize_ship_name(image, ship_name_area,ocr_api)
+                logger.info(f'API OCR result: {api_result}')
+                
+                # Save results to file
+                # with open(os.path.join(folder_path, 'ocr_results.txt'), 'a', encoding='utf-8') as f:
+                #     f.write(f'{filename}: Local={ship_name}, API={api_result}\n')
+                    
+            except Exception as e:
+                logger.error(f'Error processing {filename}: {str(e)}')
+                continue

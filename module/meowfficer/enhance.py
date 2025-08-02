@@ -7,6 +7,7 @@ from module.meowfficer.buy import MEOWFFICER_COINS
 from module.ocr.ocr import Digit, DigitCounter
 from module.ui.assets import MEOWFFICER_GOTO_DORMMENU
 from module.ui.page import page_meowfficer
+from module.exception import GameTooManyClickError
 
 MEOWFFICER_SELECT_GRID = ButtonGrid(
     origin=(751, 237), delta=(130, 147), button_shape=(70, 20), grid_shape=(4, 3),
@@ -156,7 +157,8 @@ class MeowfficerEnhance(MeowfficerBase):
         current = 0
         retry = Timer(1, count=2)
         skip_first_screenshot = True
-
+        last_button_names = None  # 上一次检测到的按钮特征
+        same_button_time = 0
         while 1:
             if skip_first_screenshot:
                 skip_first_screenshot = False
@@ -171,6 +173,26 @@ class MeowfficerEnhance(MeowfficerBase):
             # Scan for feed, exit if none
             buttons = self.meow_feed_scan()
             if not len(buttons):
+                break
+
+            current_button_names = tuple(sorted(button.name for button in buttons))
+            # 如果特征与上一次一致，记录
+            if current_button_names == last_button_names:
+                same_button_time += 1
+            else:
+                # 特征不一致时重置记录
+                same_button_time = 0
+                last_button_names = current_button_names
+            if same_button_time >= 7:
+                logger.warning("指挥猫素材在大世界中!") #重复点击太多次猫说明这个猫在大世界
+                current = 0 #修改扫描数，不然还会"ENHANCE ONCE"
+                try:
+                    self.ui_click(MEOWFFICER_FEED_CONFIRM, check_button=MEOWFFICER_ENHANCE_CONFIRM,
+                                 offset=(20, 20), skip_first_screenshot=True)
+                    self.meow_enhance_confirm()
+                except GameTooManyClickError:
+                    logger.warning(f"没有陪玩的指挥猫素材")
+                    break
                 break
 
             # Else click each button to
@@ -344,7 +366,11 @@ class MeowfficerEnhance(MeowfficerBase):
         for _ in range(2):
             # Select target meowfficer
             # for enhancement
-            self._meow_select()
+            try:
+                self._meow_select()
+            except GameTooManyClickError:
+                logger.warning(f"槽位{self.config.MeowfficerTrain_EnhanceIndex}没有指挥猫")
+                return f'none cat in slot {self.config.MeowfficerTrain_EnhanceIndex}'
 
             if self._meow_get_level() >= 30:
                 logger.info('Current meowfficer is already leveled max')

@@ -5,6 +5,7 @@ import random
 
 from module.campaign.campaign_base import CampaignBase
 from module.campaign.campaign_event import CampaignEvent
+from module.shop.shop_status import ShopStatus
 from module.campaign.campaign_ui import MODE_SWITCH_1
 from module.config.config import AzurLaneConfig
 from module.exception import CampaignEnd, RequestHumanTakeover, ScriptEnd
@@ -13,8 +14,12 @@ from module.logger import logger
 from module.notify import handle_notify
 from module.ui.page import page_campaign
 
+from module.exception import GameStuckError,GamePageUnknownError
+from module.handler.assets import LOW_EMOTION_LEFT
+from module.base.button import Button
+from module.ocr.ocr import Ocr
 
-class CampaignRun(CampaignEvent):
+class CampaignRun(CampaignEvent, ShopStatus):
     folder: str
     name: str
     stage: str
@@ -94,7 +99,10 @@ class CampaignRun(CampaignEvent):
             return True
         # Oil limit
         if oil_check:
-            if self.get_oil() < max(500, self.config.StopCondition_OilLimit):
+            self.status_get_gems()
+            self.get_coin()
+            _oil = self.get_oil()
+            if _oil < max(500, self.config.StopCondition_OilLimit):
                 logger.hr('Triggered stop condition: Oil limit')
                 self.config.task_delay(minute=(120, 240))
                 return True
@@ -338,8 +346,74 @@ class CampaignRun(CampaignEvent):
             logger.info('Commission notice found')
             self.config.task_call('Commission', force_call=True)
             self.config.task_stop('Commission notice found')
+            
+    def sync_emotion(self):
+        KEYS = ['.Emotion.Fleet1Value','.Emotion.Fleet1Record','.Emotion.Fleet1Recover','.Emotion.Fleet2Value','.Emotion.Fleet2Record','.Emotion.Fleet2Recover']
+        DATA =[self.config.Emotion_Fleet1Value,self.config.Emotion_Fleet1Record,self.config.Emotion_Fleet1Recover,self.config.Emotion_Fleet2Value,self.config.Emotion_Fleet2Record,self.config.Emotion_Fleet2Recover]
+        for i, key in enumerate(KEYS):
+            data = DATA[i]
+            self.config.cross_set(keys=f'Event2{key}', value=f'{data}')
+        logger.hr('detect emotion delay,sync emotion to event2')    
+    def solve_emotion_error(self,name):
+        method = self.config.Fleet_FleetOrder
+        if method == 'fleet1_mob_fleet2_boss':
+            fleet = 'fleet_1'
+        elif method == 'fleet1_boss_fleet2_mob':
+            fleet = 'fleet_2'
+        elif method == 'fleet1_all_fleet2_standby':
+            fleet = 'fleet_1'
+        elif method == 'fleet1_standby_fleet2_all':
+            fleet = 'fleet_2'
+        logger.info(f"now combat is {method}")    
+        logger.warning(f"{name} recorded {fleet} is :{getattr(self.campaign.emotion, fleet).current}")
+        if getattr(self.campaign.emotion, fleet).current > 75:    
+            handle_notify(
+                self.config.Error_OnePushConfig,
+                title=f"Alas <{self.config.config_name}> {name} Emotion calculate error ",
+                content=f"<{self.config.config_name}> {fleet} recorded is {getattr(self.campaign.emotion, fleet).current},Emotion calculate error"
+            )
+        setattr(getattr(self.campaign.emotion, fleet), 'current', 0)
+        self.campaign.emotion.record()
+        self.campaign.emotion.show()
+        try:
+            self.campaign.emotion.check_reduce(self.campaign._map_battle)
+        except ScriptEnd as e:
+            logger.hr('Script end')
+            logger.info(str(e))
+            if self.appear_then_click(LOW_EMOTION_LEFT, offset=(30, 30), interval=3):
+                return True
+            else:
+                raise GamePageUnknownError(f'LOW EMOTION TIP FOUND, BUT NO LEFT button')      
+            
+    def detect_low_emotion(self,name):
+        EMOTION_TIP_L1=Button(area=(352, 311, 929, 348), color=(), button=(352, 311, 929, 348))
+        EMOTION_TIP_L2=Button(area=(352, 350, 929, 387), color=(), button=(352, 350, 929, 387))
+        EMOTION_TIP_L3=Button(area=(352, 390, 929, 427), color=(), button=(352, 390, 929, 427))
+        # 获取识别结果
+        result =  Ocr(EMOTION_TIP_L1, lang= 'cnocr').ocr(self.device.image)
+        result += Ocr(EMOTION_TIP_L2, lang= 'cnocr').ocr(self.device.image)
+        result += Ocr(EMOTION_TIP_L3, lang= 'cnocr').ocr(self.device.image)
+        logger.info(result)
+        if "低心情" in result or "降低好感" in result:
+            logger.warning("舰队心情低")
+            self.solve_emotion_error(name)
+        else:
+            logger.info("开始第二轮心情OCR识别")
+            EMOTION_TIP_L4=Button(area=(352, 290, 929, 325), color=(), button=(352, 290, 929, 325))
+            EMOTION_TIP_L5=Button(area=(352, 325, 929, 360), color=(), button=(352, 325, 929, 360))
+            EMOTION_TIP_L6=Button(area=(352, 360, 929, 395), color=(), button=(352, 360, 929, 395))
 
-    def run(self, name, folder='campaign_main', mode='normal', total=0):
+            result2 =  Ocr(EMOTION_TIP_L4, lang= 'cnocr').ocr(self.device.image)
+            result2 += Ocr(EMOTION_TIP_L5, lang= 'cnocr').ocr(self.device.image)
+            result2 += Ocr(EMOTION_TIP_L6, lang= 'cnocr').ocr(self.device.image)
+            if "低心情" in result2 or "降低好感" in result2:
+                logger.warning("舰队心情低")
+                self.solve_emotion_error(name)
+            else:
+                logger.warning("Game stuck, but not emotion error")
+                raise GameStuckError(f'Wait too long but not emotion error')  
+        
+    def run(self, name, folder='campaign_main', mode='normal', total=0,from_eventDaily=False):
         """
         Args:
             name (str): Name of .py file.
@@ -378,16 +452,20 @@ class CampaignRun(CampaignEvent):
                     self.campaign.withdraw()
                 except CampaignEnd:
                     pass
-                self.campaign.ensure_campaign_ui(name=self.stage, mode=mode)
+                ensure_campaign_ui_result = self.campaign.ensure_campaign_ui(name=self.stage, mode=mode)
             elif self.campaign.is_in_auto_search_menu():
                 if self.can_use_auto_search_continue():
                     logger.info('In auto search menu, skip ensure_campaign_ui.')
                 else:
                     logger.info('In auto search menu, closing.')
                     # Because event_20240725 task balancer delete self.campaign.ensure_auto_search_exit()
-                    self.campaign.ensure_campaign_ui(name=self.stage, mode=mode)
+                    ensure_campaign_ui_result = self.campaign.ensure_campaign_ui(name=self.stage, mode=mode)
             else:
-                self.campaign.ensure_campaign_ui(name=self.stage, mode=mode)
+                ensure_campaign_ui_result = self.campaign.ensure_campaign_ui(name=self.stage, mode=mode)
+            if ensure_campaign_ui_result is False:
+                logger.info('Maybe Already pass the stage, goto next.')
+                self.campaign.handle_map_stop()
+                break
             self.disable_raid_on_event()
             self.handle_commission_notice()
 
@@ -404,16 +482,59 @@ class CampaignRun(CampaignEvent):
             if self.triggered_stop_condition(oil_check=not self.campaign.is_in_auto_search_menu()):
                 break
 
+            # Update config
+            if len(self.config.modified):
+                logger.info('Updating config for dashboard')
+                self.config.update()
+
             # Run
             self.device.stuck_record_clear()
             self.device.click_record_clear()
             try:
                 self.campaign.run()
+                if self.config.task.command in ['Main2']:
+                    CurrentTimes = self.config.RegularInspections_CurrentCampaignTimes + 1
+                    CheckInterval = self.config.RegularInspections_CheckInterval
+                    self.config.modified["Main2.RegularInspections.CurrentCampaignTimes"] = CurrentTimes
+                    if self.config.RegularInspections_IsResearchInspect:
+                        # logger.info(f"Main2:CurrentTimes: {CurrentTimes}, CheckInterval: {CheckInterval}")
+                        if CurrentTimes % CheckInterval == 0:
+                            from module.regular_inspect.research_inspect import ResearchInspect
+                            ResearchInspect(config=self.config, device=self.device).CheckResearchShipExperience()
+                        self.config.update()
+                    if self.config.RegularInspections_IsFleetInspect:
+                        if CurrentTimes % CheckInterval == 0:
+                            from module.regular_inspect.fleet_inspect import FleetInfoCheck
+                            fleet_index = self.config.RegularInspections_FleetInspectIndex
+                            if fleet_index == 0:
+                                method = self.config.Fleet_FleetOrder
+                                if method == 'fleet1_mob_fleet2_boss':
+                                    fleet = 'Fleet1'
+                                elif method == 'fleet1_boss_fleet2_mob':
+                                    fleet = 'Fleet2'
+                                elif method == 'fleet1_all_fleet2_standby':
+                                    fleet = 'Fleet1'
+                                elif method == 'fleet1_standby_fleet2_all':
+                                    fleet = 'Fleet2'
+                                fleet_index = getattr(self.config, f'Fleet_{fleet}')   
+                                logger.info(f"now combat is {method}, fleet_index: {fleet_index}")
+                            FleetInfoCheck(config=self.config, device=self.device).get_fleet_info(fleet_index)
+                        self.config.update()
             except ScriptEnd as e:
                 logger.hr('Script end')
                 logger.info(str(e))
+                if from_eventDaily == True:
+                    if str(e) == 'Emotion control':
+                        self.sync_emotion()
                 break
-
+            except GameStuckError as e:
+               if self.detect_low_emotion(name):
+                   break
+                   
+            # Update config
+            if len(self.campaign.config.modified):
+                logger.info('Updating config for dashboard')
+                self.campaign.config.update()
             # After run
             self.run_count += 1
             if self.config.StopCondition_RunCount:
@@ -438,3 +559,48 @@ class CampaignRun(CampaignEvent):
                 self.config.task_stop()
 
         self.campaign.ensure_auto_search_exit()
+
+
+if __name__ == '__main__':
+    import numpy as np
+    from PIL import Image   
+    # 初始化logger
+    logger.hr('测试低心情检测')
+    
+    def detect_low_emotion_TEST(image: np.ndarray):
+        EMOTION_TIP_L1=Button(area=(352, 311, 929, 348), color=(), button=(352, 311, 929, 348))
+        EMOTION_TIP_L2=Button(area=(352, 350, 929, 387), color=(), button=(352, 350, 929, 387))
+        EMOTION_TIP_L3=Button(area=(352, 390, 929, 427), color=(), button=(352, 390, 929, 427))
+
+        logger.info("开始OCR识别")
+        # 获取识别结果
+        result =  Ocr(EMOTION_TIP_L1, lang= 'cnocr').ocr(image)
+        result += Ocr(EMOTION_TIP_L2, lang= 'cnocr').ocr(image)
+        result += Ocr(EMOTION_TIP_L3, lang= 'cnocr').ocr(image)
+        logger.info(f"OCR识别结果: {result}")
+        
+        if "低心情" in result or "降低好感" in result:
+            logger.warning("舰队心情低")
+        else:
+            logger.info("开始第二轮OCR识别")
+            EMOTION_TIP_L4=Button(area=(352, 290, 929, 325), color=(), button=(352, 290, 929, 325))
+            EMOTION_TIP_L5=Button(area=(352, 325, 929, 360), color=(), button=(352, 325, 929, 360))
+            EMOTION_TIP_L6=Button(area=(352, 360, 929, 395), color=(), button=(352, 360, 929, 395))
+
+            result2 =  Ocr(EMOTION_TIP_L4, lang= 'cnocr').ocr(image)
+            result2 += Ocr(EMOTION_TIP_L5, lang= 'cnocr').ocr(image)
+            result2 += Ocr(EMOTION_TIP_L6, lang= 'cnocr').ocr(image)
+            if "低心情" in result2 or "降低好感" in result2:
+                logger.warning("舰队心情低")
+            else:
+                logger.warning("Game stuck, but not emotion error")
+                raise GameStuckError(f'Wait too long but not emotion error')  
+    
+    # 测试用例
+    logger.info("正在读取测试图片")
+    try:
+        image = np.array(Image.open(r'C:\Users\W1NDe\Documents\GitHub\M-AzurLaneAutoScript\module\campaign\test.png').convert('RGB'))
+        logger.info(f"成功读取图片,尺寸: {image.shape}")
+        detect_low_emotion_TEST(image)
+    except Exception as e:
+        logger.warning(f"读取图片失败: {str(e)}")

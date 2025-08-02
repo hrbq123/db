@@ -2,11 +2,44 @@ from module.base.timer import Timer
 from module.coalition.assets import *
 from module.combat.assets import BATTLE_PREPARATION
 from module.combat.combat import Combat
-from module.exception import CampaignNameError, RequestHumanTakeover, ScriptError
+from module.exception import CampaignNameError, RequestHumanTakeover, ScriptEnd, ScriptError
 from module.logger import logger
 from module.ui.assets import BACK_ARROW
 from module.ui.page import page_coalition
 from module.ui.switch import Switch
+
+from module.map.assets import *
+from module.map.map_fleet_preparation import FleetOperator
+
+class TeamSwitch(Switch):
+    def appear(self, main):
+        """
+        Args:
+            main (ModuleBase):
+
+        Returns:
+            bool
+        """
+        for data in self.state_list:
+            if main.image_color_count(data['check_button'], color=(191, 192, 198), threshold=221, count=100):
+                return True
+
+        return False
+
+    def get(self, main):
+        """
+        Args:
+            main (ModuleBase):
+
+        Returns:
+            str: state name or 'unknown'.
+        """
+        for data in self.state_list:
+            if main.image_color_count(data['check_button'], color=(191, 192, 198), threshold=221, count=100):
+                return data['state']
+
+        return 'unknown'
+
 
 
 class NeoncitySwitch(Switch):
@@ -20,6 +53,11 @@ class NeoncitySwitch(Switch):
 
 
 class CoalitionUI(Combat):
+    TEAM_SIDEBAR = TeamSwitch('TEAM_SIDEBAR', is_selector=True)
+    TEAM_SIDEBAR.add_state('TEAM_1', check_button=SIDEBAR_TEAM_1)
+    TEAM_SIDEBAR.add_state('TEAM_2', check_button=SIDEBAR_TEAM_2)
+    TEAM_SIDEBAR.add_state('TEAM_3', check_button=SIDEBAR_TEAM_3)
+    TEAM_SIDEBAR.add_state('TEAM_4', check_button=SIDEBAR_TEAM_4)
     def in_coalition(self):
         # The same as raid
         return self.ui_page_appear(page_coalition, offset=(20, 20))
@@ -178,6 +216,40 @@ class CoalitionUI(Combat):
             logger.error(f'FLEET_PREPARATION is not defined in event {event}')
             raise ScriptError
 
+    @staticmethod
+    def coalition_name_increase(stage):
+        """
+        Args:
+            stage (str): Stage name such as 'tc1', 'tc2', 'tc3'.
+
+        Returns:
+            str: Next stage name, if already at highest stage, return current stage.
+        """
+        stage = stage.lower()
+        
+        # Define stage sequence in lists
+        stage_lists = {
+            # Stage sequence for coalition_20230323 event
+            'coalition_20230323': ['tc1', 'tc2', 'tc3'],
+            # Stage sequence for coalition_20240627 event
+            'coalition_20240627': ['easy', 'normal', 'hard']
+        }
+        
+        # Find which list contains the current stage
+        for event, stages in stage_lists.items():
+            if stage in stages:
+                # If not the last stage, return the next stage
+                index = stages.index(stage)
+                if index < len(stages) - 1:
+                    return stages[index + 1]
+                else:
+                    # If already at the last stage, return current stage
+                    return stage
+        
+        # Unknown stage name, log warning and return original value
+        logger.warning(f'Unknown coalition stage: {stage}')
+        return stage
+
     def handle_fleet_preparation(self, event, stage, mode):
         """
         Args:
@@ -241,10 +313,12 @@ class CoalitionUI(Combat):
         """
         button = self.coalition_get_entrance(event, stage)
         fleet_preparation = self.coalition_get_fleet_preparation(event)
+        map_timer = Timer(5)
         campaign_timer = Timer(5)
         fleet_timer = Timer(5)
         campaign_click = 0
         fleet_click = 0
+        team_id = 1
         while 1:
             if skip_first_screenshot:
                 skip_first_screenshot = False
@@ -264,16 +338,49 @@ class CoalitionUI(Combat):
                                 "This stage can only be farmed once a day, "
                                 "but it's the second time that you are entering")
                 raise RequestHumanTakeover
+            def handle_fleet_recommend(stage):
+                if self.config.Coalition_UseRecommendFleet:
+                    fleet_i = FleetOperator(
+                    choose=COALITION_FLEET_1_CHOOSE, advice=FLEET_1_ADVICE, bar=FLEET_1_BAR, clear=FLEET_1_CLEAR,
+                    in_use=COALITION_FLEET_1_IN_USE, hard_satisfied=FLEET_1_HARD_SATIESFIED, main=self)
+                    nonlocal team_id  
+                    if team_id < 5:
+                        if stage in ['sp', 'ex']:
+                            if fleet_i.in_use():
+                                team_id += 1
+                                if team_id <= 4:
+                                    self.TEAM_SIDEBAR.set(f'TEAM_{team_id}', main=self)
+                                return 'continue'
+                            else:
+                                fleet_i.recommend()
+                                return 'continue'
+                    logger.info('Recommend fleet')
+                    fleet_i.recommend()
+                    return True
+                else:
+                    return False
             if self.appear(FLEET_NOT_PREPARED, offset=(20, 20)):
-                logger.critical('FLEET_NOT_PREPARED')
-                logger.critical('Please prepare you fleets before running coalition battles')
-                raise RequestHumanTakeover
+                result = handle_fleet_recommend(stage)
+                if result == 'continue':
+                    continue
+                elif result == False:
+                    logger.critical('FLEET_NOT_PREPARED')
+                    logger.critical('Please prepare you fleets before running coalition battles')
+                    raise RequestHumanTakeover
             if self.appear(EMPTY_FLAGSHIP, offset=(20, 20)):
-                logger.critical('EMPTY_FLAGSHIP, Please prepare you fleets before running coalition battles')
-                raise RequestHumanTakeover
+                result = handle_fleet_recommend(stage)
+                if result == 'continue':
+                    continue
+                elif result == False:
+                    logger.critical('EMPTY_FLAGSHIP, Please prepare you fleets before running coalition battles')
+                    raise RequestHumanTakeover
             if self.appear(EMPTY_VANGUARD, offset=(20, 20)):
-                logger.critical('EMPTY_VANGUARD, Please prepare you fleets before running coalition battles')
-                raise RequestHumanTakeover
+                result = handle_fleet_recommend(stage)
+                if result == 'continue':
+                    continue
+                elif result == False:
+                    logger.critical('EMPTY_VANGUARD, Please prepare you fleets before running coalition battles')
+                    raise RequestHumanTakeover
 
             # End
             if self.appear(BATTLE_PREPARATION, offset=(20, 20)):

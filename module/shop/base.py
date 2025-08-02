@@ -208,7 +208,7 @@ class ShopBase(UI):
 
         return False
 
-    def shop_get_items(self, skip_first_screenshot=True):
+    def shop_get_items(self, skip_first_screenshot=True,cost=True):
         """
         Args:
             skip_first_screenshot (bool):
@@ -248,7 +248,7 @@ class ShopBase(UI):
                 self.device.image,
                 name=True,
                 amount=False,
-                cost=True,
+                cost=cost,
                 price=True,
                 tag=False
             )
