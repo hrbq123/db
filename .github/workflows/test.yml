@@ -1,4 +1,4 @@
-name: Sync from Upstream
+name: Sync from
 
 on:
   schedule:
@@ -19,6 +19,8 @@ jobs:
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          # 配置默认编辑器为cat，避免需要交互
+          git config --global core.editor "cat"
 
       - name: Sync from upstream
         id: sync
@@ -54,15 +56,12 @@ jobs:
                 # 尝试用上游版本覆盖（可根据需求改为--ours保留本地）
                 git checkout --theirs "$file"
                 git add "$file"
-                # 若需要更智能的文本合并，可添加合并工具：
-                # git mergetool --tool=meld "$file"
               fi
             done
             
-            # 3. 尝试完成合并
-            if ! git merge --continue; then
+            # 3. 尝试完成合并（指定提交信息，避免编辑器交互）
+            if ! git commit -m "自动解决冲突：合并 upstream/master 到 db 分支"; then
               echo "自动解决失败，仍有未处理冲突"
-              # 记录冲突文件到输出，用于后续通知
               echo "conflict_files=$conflict_files" >> $GITHUB_OUTPUT
               exit 1
             fi
@@ -76,7 +75,7 @@ jobs:
             echo "无新内容需要推送"
           fi
 
-      - name: 冲突通知（如需要）
+      - name: 冲突通知
         if: steps.sync.outputs.conflict == 'true' && failure()
         uses: actions/github-script@v6
         with:
