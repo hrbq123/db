@@ -13,7 +13,8 @@ jobs:
       - name: Checkout your repo
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0  # 获取全部历史
+          fetch-depth: 100  # 只拉取最近100个提交（可根据需要调整）
+          ref: db  # 直接指定 checkout db 分支，减少切换操作
 
       - name: Set up Git
         run: |
@@ -21,17 +22,49 @@ jobs:
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
 
       - name: Sync from upstream
+        id: sync
         run: |
           # 确保 upstream 存在
           git remote remove upstream || true
           git remote add upstream https://github.com/LmeSzinc/AzurLaneAutoScript.git
           
-          # 拉取最新代码
-          git fetch upstream
-          git checkout --track origin/db || git checkout db
+          # 拉取上游最新代码（限制深度，只取最近100个提交）
+          git fetch --depth=100 upstream master
           
-          # 尝试合并
-          git merge --no-edit upstream/master
+          # 确保本地 db 分支与远程同步
+          git pull --rebase origin db --depth=100
+          
+          # 尝试合并（只合并上游master的最新提交）
+          if git merge --no-edit upstream/master; then
+            echo "合并成功，无冲突"
+            echo "conflict=false" >> $GITHUB_OUTPUT
+          else
+            echo "检测到冲突，尝试自动解决..."
+            echo "conflict=true" >> $GITHUB_OUTPUT
+            
+            # 获取冲突文件列表
+            conflict_files=$(git diff --name-only --diff-filter=U)
+            
+            # 分类处理冲突
+            for file in $conflict_files; do
+              if file --mime-type -b "$file" | grep -q '^image/\|^application/'; then
+                echo "二进制文件冲突: $file，选择上游版本"
+                git checkout --theirs "$file"
+                git add "$file"
+              else
+                echo "文本文件冲突: $file，使用上游版本"
+                git checkout --theirs "$file"
+                git add "$file"
+              fi
+            done
+            
+            # 完成合并提交
+            if ! git commit -m "自动解决冲突：合并 upstream/master 到 db 分支"; then
+              echo "自动解决失败，仍有未处理冲突"
+              echo "conflict_files=$conflict_files" >> $GITHUB_OUTPUT
+              exit 1
+            fi
+          fi
           
           # 推送更改
           git push origin db
