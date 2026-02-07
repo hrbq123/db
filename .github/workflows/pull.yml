@@ -9,11 +9,15 @@ on:
 jobs:
   sync:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write  # 显式声明需要写入代码的权限
+      workflows: write # 显式声明需要修改工作流的权限
     steps:
       - name: Checkout your repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4  # 升级到v4版本（更稳定）
         with:
           fetch-depth: 0  # 获取全部历史
+          token: ${{ secrets.SYNC_PAT }}  # 使用自定义PAT而非默认令牌
 
       - name: Set up Git
         run: |
@@ -30,8 +34,11 @@ jobs:
           git fetch upstream
           git checkout --track origin/db || git checkout db
           
-          # 尝试合并
-          git merge --no-edit upstream/master
+          # 尝试合并（冲突时自动中止，避免工作流失败）
+          git merge --no-edit upstream/master || {
+            echo "合并出现冲突，终止同步"
+            exit 1
+          }
           
-          # 推送更改
-          git push origin db
+          # 推送更改（使用自定义PAT的凭据）
+          git push https://x-access-token:${{ secrets.SYNC_PAT }}@github.com/hrbq123/db.git db
