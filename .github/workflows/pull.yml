@@ -23,23 +23,29 @@ jobs:
       - name: Sync from upstream
         run: |
           # 确保 upstream 存在
-          git remote remove upstream || true
+          git remote remove upstream 2>/dev/null || true
           git remote add upstream https://github.com/hrbq123/Alas-with-Dashboard.git
           
           # 拉取最新代码
           git fetch upstream
-          git checkout --track origin/db || git checkout db
           
-          # 先合并但不提交
-          git merge --no-ff --no-commit upstream/master || true
+          # 确保在正确的分支
+          git checkout db 2>/dev/null || git checkout -b db
           
-          # 重置工作流程文件的更改（避免权限问题）
-          git reset HEAD .github/workflows/
-          git checkout -- .github/workflows/
+          # 合并上游更改
+          git merge --no-edit upstream/master
           
-          # 提交并推送
-          git add .
-          git commit -m "Sync from upstream (excluding workflow files)" || echo "No changes to commit"
+          # 检查是否有工作流程文件，如果有则移除
+          if [ -f ".github/workflows/main.yml" ]; then
+            echo "Removing workflow file to avoid permission issues"
+            git rm -rf .github/workflows/main.yml 2>/dev/null || true
+            # 如果工作流程目录为空，也删除目录
+            if [ -d ".github/workflows" ] && [ -z "$(ls -A .github/workflows/)" ]; then
+              git rm -rf .github/workflows 2>/dev/null || true
+            fi
+            # 提交移除工作流程文件的更改
+            git commit -m "Remove workflow files to avoid permission issues" || echo "No workflow files to remove"
+          fi
           
           # 推送更改
           git push origin db
